@@ -265,11 +265,19 @@ def extract_dates(text):
         if 1 <= mo <= 12 and 1 <= d <= 31:
             dates.append('%04d-%02d-%02d' % (y, mo, d))
     for m in RE_DATE_FULL.finditer(text):
-        y, mo, d = int(m.group(1)), int(m.group(2)), int(m.group(3))
+        y = int(m.group(1))
+        seg = text[m.start():m.end()]
+        parts = re.split(r'[-/.]', seg)
+        mo = int(parts[1]) if len(parts) >= 2 else 0
+        d = int(parts[2]) if len(parts) >= 3 else 0
         if 1 <= mo <= 12 and 1 <= d <= 31:
             dates.append('%04d-%02d-%02d' % (y, mo, d))
     for m in RE_DATE_CN.finditer(text):
-        y, mo, d = int(m.group(1)), int(m.group(2)), int(m.group(3))
+        y = int(m.group(1))
+        seg = text[m.start():m.end()]
+        parts = re.split(r'年|月|日', seg)
+        mo = int(parts[1]) if len(parts) >= 2 else 0
+        d = int(parts[2]) if len(parts) >= 3 else 0
         if 1 <= mo <= 12 and 1 <= d <= 31:
             dates.append('%04d-%02d-%02d' % (y, mo, d))
     if not dates:
