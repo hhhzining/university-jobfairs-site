@@ -5,24 +5,21 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>广西12校双选会信息服务平台</title>
 <meta name="description" content="广西大学、广西科技大学等12所公办本科高校校园双选会信息服务平台。每日自动抓取各校官网就业信息网公告，汇总未来已公布场次，数据可追溯。">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%234f46e5'/%3E%3Cstop offset='1' stop-color='%232563eb'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='14' fill='url(%23g)'/%3E%3Cpath d='M18 44V26l14-8 14 8v18' stroke='%23fff' stroke-width='4' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M26 44v-9h12v9' stroke='%23c7d2fe' stroke-width='4' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230a0a0a'/%3E%3Cpath d='M18 44V26l14-8 14 8v18' stroke='%23fff' stroke-width='4' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M26 44v-9h12v9' stroke='%23c9c9c9' stroke-width='4' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://miaoda.feishu.cn" crossorigin>
 <link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Sans+SC:wght@300;400;500;600;700;800;900&display=swap">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<!-- ===== 顶部导航（毛玻璃吸顶） ===== -->
+<!-- ===== 顶部导航（紧凑吸顶） ===== -->
 <header class="topbar">
   <div class="topbar-inner">
     <a class="brand" href="#top" aria-label="返回顶部">
       <svg class="brand-icon" viewBox="0 0 64 64" aria-hidden="true">
-        <defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stop-color="#4f46e5"/><stop offset="1" stop-color="#2563eb"/>
-        </linearGradient></defs>
-        <rect width="64" height="64" rx="14" fill="url(#bg)"/>
+        <rect width="64" height="64" rx="14" fill="#0a0a0a"/>
         <path d="M18 44V26l14-8 14 8v18" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M26 44v-9h12v9" stroke="#c7d2fe" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M26 44v-9h12v9" stroke="#c9c9c9" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
       <span class="brand-text">
         <strong>广西12校双选会</strong>
@@ -43,19 +40,12 @@
 
 <main id="top">
 
-  <!-- ===== Hero 渐变区 ===== -->
+  <!-- ===== Hero（黑白） ===== -->
   <section class="hero">
-    <div class="hero-bg" aria-hidden="true">
-      <div class="blob blob-a"></div>
-      <div class="blob blob-b"></div>
-      <div class="hero-grid"></div>
-    </div>
     <div class="hero-inner">
-      <div class="hero-copy">
-        <p class="eyebrow"><span class="eyebrow-dot"></span>每日 08:00 自动更新 · 数据来自各校官网</p>
-        <h1>广西 12 所公办本科高校<br>校园双选会，一站掌握</h1>
-        <p class="hero-desc">聚合各高校官网就业信息网已公布的双选会 / 招聘会 / 供需见面会，信息与官方公告实时同步，点击即可直达原文核实。</p>
-      </div>
+      <p class="eyebrow"><span class="eyebrow-dot"></span>每日 08:00 自动更新 · 数据来自各校官网</p>
+      <h1>广西 12 所公办本科高校<br>校园双选会，一站掌握</h1>
+      <p class="hero-desc">聚合各高校官网就业信息网已公布的双选会 / 招聘会 / 供需见面会，信息与官方公告实时同步，点击即可直达原文核实。</p>
       <div class="kpi" role="group" aria-label="数据概览">
         <div class="kpi-item">
           <span class="kpi-num" id="stTotal">–</span>
@@ -122,6 +112,7 @@
       <p class="list-hint" id="listHint">点击场次可查看官方公告原文</p>
     </div>
     <div id="fairList" class="fair-list" role="list" aria-label="双选会列表"></div>
+    <div id="pager" class="pager" hidden></div>
     <div id="emptyState" class="empty" hidden>
       <svg width="40" height="40" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M16.5 16.5L21 21" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
       <p>暂无符合条件的双选会，请调整筛选条件</p>
@@ -135,7 +126,7 @@
         <h2>高校覆盖</h2>
         <span class="result-count">12 所公办本科 · 逐校核查</span>
       </div>
-      <p class="list-hint">每所高校均核查官网就业信息网 / 官方就业平台，确保无遗漏</p>
+      <p class="list-hint">点击学校卡片，进入该校官网就业信息网</p>
     </div>
     <div id="schoolGrid" class="school-grid" role="list" aria-label="高校核查状态"></div>
   </section>
@@ -172,7 +163,7 @@
         </div>
         <div>
           <h3>更新机制</h3>
-          <p>每日 08:00（北京时间）由 GitHub Actions 自动抓取各校官网，有新增或变更时自动更新并部署，全程可追溯。</p>
+          <p>每日 08:00（北京时间）由 GitHub Actions 自动抓取各校官网，有新增或变更时自动更新并部署；每日 19:00 邮件推送未来 7 天场次提醒。</p>
         </div>
       </div>
     </div>
@@ -182,10 +173,8 @@
 
 <footer class="foot">
   <div class="foot-inner">
+    <p>© 2026 Jeremy He · 广西12校双选会信息服务平台</p>
     <p>数据来源：各高校官网就业信息网 / 官方就业平台公告 · 信息仅供参考，具体以各校官方公告为准</p>
-    <p>每日由 GitHub Actions 自动抓取更新 · 开源：
-      <a id="repoLink" href="#" target="_blank" rel="noopener">GitHub 仓库</a>
-    </p>
   </div>
 </footer>
 

@@ -4,6 +4,8 @@ on:
   schedule:
     # 每天 08:00（北京时间 = 00:00 UTC）自动抓取 12 所高校官网就业信息
     - cron: '0 0 * * *'
+    # 每天 19:00（北京时间 = 11:00 UTC）发送未来 7 天双选会邮件提醒（重点标记明天场次）
+    - cron: '0 11 * * *'
   workflow_dispatch:   # 支持在 GitHub Actions 页面手动触发
   push:
     branches: [main]
@@ -72,3 +74,24 @@ jobs:
       - name: 部署到 GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+  # 每天 19:00（北京时间）发送邮件：未来 7 天双选会 + 明天场次重点标记
+  email-report:
+    needs: update
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: 检出仓库
+        uses: actions/checkout@v4
+
+      - name: 安装 Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: 发送每日邮件提醒
+        run: python scripts/send_daily_email.py
+        env:
+          SMTP_EMAIL: ${{ secrets.SMTP_EMAIL }}
+          SMTP_AUTH_CODE: ${{ secrets.SMTP_AUTH_CODE }}
+          TO_EMAIL: 1079594841@qq.com
