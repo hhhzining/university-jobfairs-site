@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>广西12校双选会日历</title>
+<meta name="description" content="广西大学、广西科技大学等12所公办本科高校校园双选会信息汇总，每日自动更新，数据来自各校官网就业信息网。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231a6b57'/%3E%3Cpath d='M18 44V26l14-8 14 8v18' stroke='%23fff' stroke-width='4' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M26 44v-9h12v9' stroke='%23ffd166' stroke-width='4' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://miaoda.feishu.cn" crossorigin>
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Sans+SC:wght@300;400;500;600;700;800;900&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="page">
+
+  <header class="top">
+    <div class="brand">
+      <svg class="brand-icon" viewBox="0 0 64 64" aria-hidden="true">
+        <rect width="64" height="64" rx="14" fill="#1a6b57"/>
+        <path d="M18 44V26l14-8 14 8v18" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M26 44v-9h12v9" stroke="#ffd166" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <div>
+        <h1>广西12校双选会日历</h1>
+        <p class="subtitle">12 所公办本科高校 · 校园双选会信息汇总 · 每日自动更新</p>
+      </div>
+    </div>
+    <div class="update-box">
+      <span class="dot" aria-hidden="true"></span>
+      <span id="updatedAt">加载中…</span>
+    </div>
+  </header>
+
+  <section class="stats" id="stats" aria-label="数据概览">
+    <div class="stat"><span class="stat-num" id="stTotal">–</span><span class="stat-label">未来双选会</span></div>
+    <div class="stat"><span class="stat-num" id="stNear">–</span><span class="stat-label">近 7 天</span></div>
+    <div class="stat"><span class="stat-num" id="stSchools">–</span><span class="stat-label">覆盖高校</span></div>
+    <div class="stat"><span class="stat-num" id="stOnline">–</span><span class="stat-label">线上场次</span></div>
+  </section>
+
+  <section class="controls" aria-label="筛选">
+    <div class="search-row">
+      <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16.5 16.5L21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      <input id="searchInput" type="search" placeholder="搜索双选会名称 / 学校 / 地点" autocomplete="off">
+    </div>
+    <div class="filter-row">
+      <select id="schoolSelect" aria-label="按学校筛选">
+        <option value="">全部学校（12所）</option>
+      </select>
+      <div class="view-tabs" role="tablist" aria-label="时间范围">
+        <button class="tab active" data-view="all" role="tab" aria-selected="true">全部</button>
+        <button class="tab" data-view="7d" role="tab" aria-selected="false">近7天</button>
+        <button class="tab" data-view="online" role="tab" aria-selected="false">线上</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="listWrap" aria-live="polite">
+    <div class="list-head">
+      <span id="resultCount">加载中…</span>
+      <button id="sortToggle" class="sort-btn" type="button">按日期排序</button>
+    </div>
+    <div id="fairList" class="fair-list"></div>
+    <div id="emptyState" class="empty" hidden>暂无符合条件的双选会</div>
+  </section>
+
+  <section class="schools-block" aria-label="12所高校核查状态">
+    <h2>高校覆盖情况</h2>
+    <div id="schoolGrid" class="school-grid"></div>
+  </section>
+
+  <footer class="foot">
+    <p>数据来源：各高校官网就业信息网 / 官方就业平台公告（新锦成、云就业、24365 广西毕业生就业网、就业宝等）</p>
+    <p>每日由 GitHub Actions 自动抓取更新 · 本项目开源：
+      <a id="repoLink" href="#" target="_blank" rel="noopener">GitHub 仓库</a>
+    </p>
+  </footer>
+
+</div>
+<script src="app.js"></script>
+</body>
+</html>

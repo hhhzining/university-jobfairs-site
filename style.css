@@ -1,0 +1,142 @@
+/* 广西12校双选会日历 · 移动优先 */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --ink: #1f2933;
+  --ink-2: #52606d;
+  --ink-3: #7b8794;
+  --line: #e4e7eb;
+  --bg: #f5f7f6;
+  --card: #ffffff;
+  --brand: #1a6b57;
+  --brand-soft: #e6f2ee;
+  --accent: #d97706;
+  --accent-soft: #fef3e2;
+  --online: #2563eb;
+  --online-soft: #e8effd;
+  --radius: 14px;
+}
+html { -webkit-text-size-adjust: 100%; }
+body {
+  font-family: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.55;
+}
+.page { max-width: 860px; margin: 0 auto; padding: 16px 14px 48px; }
+
+/* 顶栏 */
+.top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 14px; }
+.brand { display: flex; align-items: center; gap: 12px; }
+.brand-icon { width: 44px; height: 44px; flex: none; border-radius: 12px; }
+h1 { font-size: 20px; font-weight: 700; letter-spacing: .01em; }
+.subtitle { font-size: 12.5px; color: var(--ink-3); margin-top: 2px; }
+.update-box {
+  flex: none; display: flex; align-items: center; gap: 6px;
+  font-size: 12px; color: var(--ink-2);
+  background: var(--card); border: 1px solid var(--line); border-radius: 999px;
+  padding: 6px 12px; white-space: nowrap;
+}
+.dot { width: 8px; height: 8px; border-radius: 50%; background: #22c55e; flex: none; }
+
+/* 统计卡 */
+.stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 14px; }
+.stat {
+  background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 14px 16px; display: flex; flex-direction: column; gap: 2px;
+}
+.stat-num { font-size: 26px; font-weight: 800; color: var(--brand); font-variant-numeric: tabular-nums; }
+.stat-label { font-size: 12px; color: var(--ink-3); }
+
+/* 筛选 */
+.controls { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 12px; margin-bottom: 14px; }
+.search-row { position: relative; display: flex; align-items: center; }
+.search-icon { width: 18px; height: 18px; position: absolute; left: 12px; color: var(--ink-3); }
+#searchInput {
+  width: 100%; min-height: 44px; font-size: 16px;
+  border: 1px solid var(--line); border-radius: 10px; background: #fff;
+  padding: 10px 12px 10px 40px; color: var(--ink); outline: none;
+}
+#searchInput:focus { border-color: var(--brand); }
+.filter-row { display: flex; gap: 10px; align-items: center; margin-top: 10px; flex-wrap: wrap; }
+#schoolSelect {
+  min-height: 40px; font-size: 15px; flex: 1 1 180px; max-width: 260px;
+  border: 1px solid var(--line); border-radius: 10px; background: #fff; color: var(--ink);
+  padding: 6px 10px; outline: none;
+}
+.view-tabs { display: flex; background: var(--bg); border-radius: 10px; padding: 3px; }
+.tab {
+  border: 0; background: transparent; font-size: 14px; color: var(--ink-2);
+  min-height: 36px; padding: 0 14px; border-radius: 8px; cursor: pointer;
+}
+.tab.active { background: var(--brand); color: #fff; font-weight: 600; }
+
+/* 列表 */
+.list-head { display: flex; justify-content: space-between; align-items: center; margin: 4px 2px 10px; }
+#resultCount { font-size: 13px; color: var(--ink-3); }
+.sort-btn {
+  border: 1px solid var(--line); background: var(--card); color: var(--ink-2);
+  font-size: 13px; min-height: 34px; padding: 0 12px; border-radius: 8px; cursor: pointer;
+}
+.fair-list { display: flex; flex-direction: column; gap: 10px; }
+.fair-card {
+  background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 14px; display: grid; grid-template-columns: 58px 1fr; gap: 0 14px;
+}
+.date-badge {
+  grid-row: 1 / span 2; text-align: center; align-self: start;
+  background: var(--brand-soft); color: var(--brand); border-radius: 10px;
+  padding: 8px 4px;
+}
+.date-badge .d { display: block; font-size: 18px; font-weight: 800; line-height: 1.2; font-variant-numeric: tabular-nums; }
+.date-badge .m { display: block; font-size: 11px; margin-top: 2px; }
+.date-badge.soon { background: var(--accent-soft); color: var(--accent); }
+.date-badge.tbd { background: var(--bg); color: var(--ink-3); }
+.fair-main { min-width: 0; }
+.fair-title {
+  font-size: 15.5px; font-weight: 600; color: var(--ink); line-height: 1.4;
+  display: inline; text-decoration: none;
+}
+a.fair-title:hover { color: var(--brand); text-decoration: underline; }
+.fair-meta { margin-top: 6px; display: flex; flex-wrap: wrap; gap: 6px 12px; font-size: 12.5px; color: var(--ink-2); }
+.tag { display: inline-flex; align-items: center; gap: 4px; border-radius: 6px; padding: 2px 8px; font-size: 12px; }
+.tag-online { background: var(--online-soft); color: var(--online); }
+.tag-offline { background: var(--brand-soft); color: var(--brand); }
+.tag-unknown { background: var(--bg); color: var(--ink-3); }
+.loc-pin { display: inline-flex; align-items: center; color: var(--ink-3); }
+.fair-note { margin-top: 6px; font-size: 12px; color: var(--ink-3); }
+.fair-link {
+  margin-top: 8px; display: inline-flex; align-items: center; gap: 5px;
+  font-size: 13px; color: var(--brand); text-decoration: none; font-weight: 600;
+  min-height: 34px;
+}
+.fair-link:hover { text-decoration: underline; }
+.empty { text-align: center; color: var(--ink-3); padding: 40px 0; font-size: 14px; }
+
+/* 高校覆盖 */
+.schools-block { margin-top: 24px; }
+.schools-block h2 { font-size: 15px; font-weight: 700; margin-bottom: 10px; }
+.school-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+.school-item {
+  background: var(--card); border: 1px solid var(--line); border-radius: 10px;
+  padding: 10px 12px; font-size: 12.5px; display: flex; justify-content: space-between; gap: 8px; align-items: center;
+}
+.school-item .s-name { font-weight: 600; color: var(--ink); }
+.school-item .s-city { color: var(--ink-3); font-size: 11px; margin-left: 4px; }
+.school-item .s-status { flex: none; font-size: 11px; padding: 2px 8px; border-radius: 999px; }
+.school-item.ok .s-status { background: var(--brand-soft); color: var(--brand); }
+.school-item.no .s-status { background: var(--bg); color: var(--ink-3); }
+
+/* 页脚 */
+.foot { margin-top: 28px; padding-top: 16px; border-top: 1px solid var(--line); font-size: 12px; color: var(--ink-3); }
+.foot p + p { margin-top: 4px; }
+.foot a { color: var(--brand); text-decoration: none; }
+.foot a:hover { text-decoration: underline; }
+
+@media (min-width: 768px) {
+  .page { padding: 28px 24px 60px; }
+  h1 { font-size: 24px; }
+  .stats { grid-template-columns: repeat(4, 1fr); }
+  .school-grid { grid-template-columns: repeat(3, 1fr); }
+  .fair-card { grid-template-columns: 72px 1fr; padding: 16px 18px; }
+  .date-badge .d { font-size: 22px; }
+}
