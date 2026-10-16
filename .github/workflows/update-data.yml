@@ -92,8 +92,8 @@ jobs:
   # 每天 19:00（北京时间）发送邮件：未来 7 天双选会 + 明天场次重点标记
   email-report:
     needs: update
-    # 只在 19:00 的定时触发时运行（push / 08:00 数据更新不发送）
-    if: ${{ github.event.schedule == '0 11 * * *' }}
+    # 只在 19:00 的定时触发或手动触发（Actions 页面 Run workflow）时运行；push / 08:00 数据更新不发送
+    if: ${{ github.event.schedule == '0 11 * * *' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     timeout-minutes: 10
     concurrency:
