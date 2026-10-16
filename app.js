@@ -1,4 +1,4 @@
-/* 广西12校双选会信息服务平台 · 逻辑层（企业级交互） */
+/* 广西12校双选会信息服务平台 · 逻辑层（现代交互） */
 (function () {
   'use strict';
 
@@ -140,7 +140,7 @@
     return '1' + dd;
   }
 
-  // ---- 列表：按月份分组表格 ----
+  // ---- 列表：按月份分组 ----
   function renderList(list, t) {
     var wrap = $('fairList');
     var empty = $('emptyState');
@@ -167,21 +167,23 @@
     groups.sort(function (a, b) { return a.key.localeCompare(b.key); });
 
     var html = '';
+    var idx = 0;
     groups.forEach(function (g) {
       var y = g.key.slice(0, 4), m = +g.key.slice(5, 7);
       html += '<div class="group-head"><span>' + y + '年' + m + '月</span>' +
               '<span class="g-count">' + g.items.length + ' 场</span><span class="g-line"></span></div>';
-      g.items.forEach(function (it) { html += rowHtml(it, t); });
+      g.items.forEach(function (it) { html += rowHtml(it, t, idx++); });
     });
     if (tbd.length) {
       html += '<div class="group-head"><span>日期待定</span>' +
               '<span class="g-count">' + tbd.length + ' 场</span><span class="g-line"></span></div>';
-      tbd.forEach(function (it) { html += rowHtml(it, t); });
+      tbd.forEach(function (it) { html += rowHtml(it, t, idx++); });
     }
     wrap.innerHTML = html;
   }
 
-  function rowHtml(it, t) {
+  function rowHtml(it, t, idx) {
+    var delay = Math.min((idx || 0) * 0.02, 0.4);
     var dd = it.date || '';
     var dayHtml, badgeHtml;
     if (isRealDate(dd)) {
@@ -205,7 +207,7 @@
     var loc = (it.location || '').trim();
     var note = (it.note || '').trim();
 
-    return '<div class="fair-row" role="row">' +
+    return '<div class="fair-row" role="row" style="animation-delay:' + delay + 's">' +
         '<div class="f-date" role="cell">' + dayHtml + '</div>' +
         '<div class="f-main" role="cell">' +
           '<div class="f-title-row">' +
@@ -224,20 +226,20 @@
       '</div>';
   }
 
-  // ---- 高校覆盖 ----
+  // ---- 高校覆盖（现代卡片网格） ----
   function renderSchools(d) {
     var grid = $('schoolGrid');
     var st = d.meta.schools_status || {};
     var html = '';
-    (d.schools || []).forEach(function (s) {
+    (d.schools || []).forEach(function (s, i) {
       var info = st[s.name] || {};
       var ok = (info.status || '').indexOf('有未来场次') >= 0;
       var statusTxt = ok ? '有未来场次' : '暂无';
       var noteTxt = (info.note || '');
+      var delay = Math.min(i * 0.03, 0.3);
       html +=
-        '<div class="school-row ' + (ok ? 'ok' : 'no') + '" role="row" title="' + esc(noteTxt) + '">' +
+        '<div class="school-item ' + (ok ? 'ok' : 'no') + '" role="listitem" title="' + esc(noteTxt) + '" style="animation-delay:' + delay + 's">' +
           '<span class="s-name">' + esc(s.name) + (s.city ? '<span class="s-city">' + esc(s.city) + '</span>' : '') + '</span>' +
-          '<span class="s-city s-note">' + esc(ok ? '' : noteTxt) + '</span>' +
           '<span class="s-status">' + esc(statusTxt) + '</span>' +
         '</div>';
     });
