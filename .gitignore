@@ -1,0 +1,6 @@
+﻿# 调试与自检产物（不入库）
+_git.log
+_shot*.log
+_shots/
+_check.log
+_fetch*.log
