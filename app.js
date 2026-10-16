@@ -219,7 +219,7 @@
       var days = Math.round((new Date(+f.y, +f.m - 1, +f.d) - new Date(+t.split('-')[0], +t.split('-')[1] - 1, +t.split('-')[2])) / 86400000);
       var badge;
       if (days === 0) { badge = '<span class="fd-badge today">今天</span>'; }
-      else if (days === 1) { badge = '<span class="fd-badge soon">明天</span>'; }
+      else if (days === 1) { badge = '<span class="fd-badge tomorrow">明天</span>'; }
       else if (days <= 7) { badge = '<span class="fd-badge soon">' + days + ' 天后</span>'; }
       else { badge = '<span class="fd-badge later"></span>'; }
       dayHtml = '<span class="fd-day">' + f.m + '/' + f.d + '</span><span class="fd-ym">' + f.y + '年</span>' + badge;
