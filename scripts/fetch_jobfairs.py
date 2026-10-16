@@ -95,7 +95,7 @@ SCHOOLS = [
 # 收录关键词（标题命中即视为双选会/招聘会候选）
 INCLUDE_KW = ('双选会', '招聘会', '供需见面', '洽谈会', '组团招聘', '空中双选', '网络招聘会', '招聘邀请函')
 # 排除关键词（普通宣讲会/职位信息不收录）
-EXCLUDE_KW = ('宣讲会', '招聘简章', '职位发布', '岗位信息', '实习信息', '招聘公告信息')
+EXCLUDE_KW = ('宣讲会', '招聘简章', '职位发布', '岗位信息', '实习信息', '招聘公告信息', '抢先看', '参会单位抢先')
 # 已确认往届/已办场次的详情 URL（人工核验），新旧数据均剔除
 KNOWN_PAST_URLS = ('nnnu.bysjy.com.cn/detail/jobfair?id=29132',
                    'gxstnu.gxbys.com/jobfair/view/id/40402')
@@ -595,6 +595,8 @@ def merge_and_filter(new_by_school, old):
             t = it.get('name') or ''
             if '已举办' in t or '已结束' in t:
                 continue
+            if any(k in t for k in EXCLUDE_KW):
+                continue  # 非独立场次（抢先看/简章/实习信息等）不兜底
             mj = re.findall(r'(20\d{2})\s*届', t)
             if mj and all(g not in ('2027', '2028') for g in mj):
                 continue

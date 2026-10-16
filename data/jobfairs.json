@@ -1,9 +1,9 @@
 {
  "meta": {
-  "updated_at": "2026-10-16T17:55+08:00",
+  "updated_at": "2026-10-16T18:29+08:00",
   "note": "数据由 GitHub Actions 每日自动抓取更新；抓取失败的学校保留上次数据。",
   "school_count": 12,
-  "jobfair_count": 40,
+  "jobfair_count": 39,
   "schools_status": {
    "广西大学": {
     "status": "已查-有未来场次",
@@ -15,7 +15,7 @@
    },
    "桂林电子科技大学": {
     "status": "已查-有未来场次",
-    "note": "本次抓取 2 条"
+    "note": "本次抓取 1 条"
    },
    "广西师范大学": {
     "status": "已查-有未来场次",
@@ -500,17 +500,6 @@
    "mode": "",
    "location": "信息，用人单位可以在“宣讲会申请栏”实时查询审核状态",
    "url": "https://jyxx.gxufe.edu.cn/News/newsXiang.html?cateid=cd403865-981f-6b48-e8e5-4825b43a6e9d&id=5d22442d-dd6d-5d90-ce1c-f4cabebd2bbd",
-   "note": ""
-  },
-  {
-   "school": "桂林电子科技大学",
-   "city": "桂林",
-   "name": "第五届云校招“名企优岗广西行”2027届毕业生秋季组团招聘会（桂林电子科技大学花江校区）参会单位抢先看",
-   "date": "待确认",
-   "date_end": null,
-   "mode": "线下",
-   "location": "花江校区学生活动中心 部分参会单位 （ 微信 扫码获取 参会单位 招聘岗位预览） 三、岗位信息 招聘",
-   "url": "https://jy.guet.edu.cn/detail/news?id=1832105&menu_id=41860&type_id=16936",
    "note": ""
   },
   {
