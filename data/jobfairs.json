@@ -1,17 +1,17 @@
 {
  "meta": {
-  "updated_at": "2026-10-16T15:43+08:00",
+  "updated_at": "2026-10-16T17:55+08:00",
   "note": "数据由 GitHub Actions 每日自动抓取更新；抓取失败的学校保留上次数据。",
   "school_count": 12,
-  "jobfair_count": 43,
+  "jobfair_count": 40,
   "schools_status": {
    "广西大学": {
-    "status": "已查-暂无未来场次",
-    "note": "入口可访问但未解析到未来双选会条目"
+    "status": "已查-有未来场次",
+    "note": "本次抓取 2 条"
    },
    "广西科技大学": {
-    "status": "已查-暂无未来场次",
-    "note": "入口可访问但未解析到未来双选会条目"
+    "status": "已查-有未来场次",
+    "note": "本次抓取 3 条"
    },
    "桂林电子科技大学": {
     "status": "已查-有未来场次",
@@ -22,8 +22,8 @@
     "note": "本次抓取 2 条"
    },
    "南宁师范大学": {
-    "status": "已查-有未来场次",
-    "note": "本次抓取 1 条"
+    "status": "已查-暂无未来场次",
+    "note": "入口可访问但未解析到未来双选会条目"
    },
    "桂林理工大学": {
     "status": "已查-暂无未来场次",
@@ -34,16 +34,16 @@
     "note": "本次抓取 3 条"
    },
    "广西财经学院": {
-    "status": "已查-暂无未来场次",
-    "note": "入口可访问但未解析到未来双选会条目"
-   },
-   "广西科技师范学院": {
     "status": "已查-有未来场次",
     "note": "本次抓取 1 条"
    },
-   "北部湾大学": {
+   "广西科技师范学院": {
     "status": "已查-暂无未来场次",
     "note": "入口可访问但未解析到未来双选会条目"
+   },
+   "北部湾大学": {
+    "status": "已查-有未来场次",
+    "note": "本次抓取 2 条"
    },
    "广西工业学院": {
     "status": "已查-有未来场次",
@@ -118,26 +118,15 @@
    "note": "自治区级行业类专场，学校承办；今日上午9:30举办；约600个展位"
   },
   {
-   "school": "桂林航天工业学院",
-   "city": "桂林",
-   "name": "关于组织参加学校2027届毕业生校园综合双选会的通知 2026-10-10",
-   "date": "2026-10-16",
-   "date_end": null,
-   "mode": "",
-   "location": "南校区 田径场 三、参加人员 1. 校领导",
-   "url": "https://www.guat.edu.cn/info/1002/23651.htm",
-   "note": ""
-  },
-  {
    "school": "广西大学",
-   "city": "南宁市",
+   "city": "南宁",
    "name": "广西大学土木建筑工程学院2027届毕业生双选会",
    "date": "2026-10-17",
    "date_end": null,
    "mode": "线下",
    "location": "广西大学东校园大学生活动中心",
-   "url": "http://jyy.gxu.edu.cn/module/jobfairs?menu_id=34130",
-   "note": "学院专场（土木建筑工程学院），约80个展位；面向2027届毕业生。"
+   "url": "https://gxu.bysjy.com.cn/detail/jobfair?id=31458",
+   "note": ""
   },
   {
    "school": "桂林航天工业学院",
@@ -163,14 +152,14 @@
   },
   {
    "school": "广西大学",
-   "city": "南宁市",
+   "city": "南宁",
    "name": "广西大学2027届毕业生秋季双选会",
    "date": "2026-10-24",
    "date_end": null,
    "mode": "线下",
-   "location": "广西大学西校园篮球场及田径场",
-   "url": "http://jyy.gxu.edu.cn/module/jobfairs?menu_id=34130",
-   "note": "校级综合类双选会，约600个展位；面向2027届毕业生。"
+   "location": "西校园篮球场及田径场",
+   "url": "https://gxu.bysjy.com.cn/detail/jobfair?id=31462",
+   "note": ""
   },
   {
    "school": "广西师范大学",
@@ -229,14 +218,14 @@
   },
   {
    "school": "北部湾大学",
-   "city": "钦州市",
+   "city": "钦州",
    "name": "职聚滨海运河城 青春启航向未来——2026年工会就业服务进校园暨北部湾大学2027届毕业生双选会",
    "date": "2026-10-30",
    "date_end": null,
    "mode": "线下",
    "location": "北部湾大学大学生创业园一楼大厅（钦州市滨海新城滨海大道12号）",
-   "url": "https://qzhu.bysjy.com.cn/module/jobfairs?menu_id=13542&type=1",
-   "note": "钦州市总工会主办；设100个展位；面向2027届毕业生；时间09:30开始"
+   "url": "https://qzhu.bysjy.com.cn/detail/jobfair?id=31533",
+   "note": ""
   },
   {
    "school": "广西民族大学",
@@ -306,14 +295,14 @@
   },
   {
    "school": "北部湾大学",
-   "city": "钦州市",
+   "city": "钦州",
    "name": "北部湾大学经济管理学院2027届毕业生秋季就业双选会",
    "date": "2026-11-10",
    "date_end": null,
    "mode": "线下",
    "location": "北部湾大学四号教学楼",
-   "url": "https://qzhu.bysjy.com.cn/module/jobfairs?menu_id=13542&type=1",
-   "note": "经济管理学院专场；设40个展位；面向2027届毕业生；时间09:00开始"
+   "url": "https://qzhu.bysjy.com.cn/detail/jobfair?id=31706",
+   "note": ""
   },
   {
    "school": "广西科技大学",
@@ -494,17 +483,6 @@
   {
    "school": "广西科技大学",
    "city": "柳州市",
-   "name": "2027届毕业生网络双选会（第二场）",
-   "date": "2027-06-01",
-   "date_end": null,
-   "mode": "线上",
-   "location": "就业宝平台",
-   "url": "http://gxkejidx.jiuyeb.cn/News/zdydetail.html?cateid=null&id=10ee6de5-569c-243e-af7f-f83e3deaaf90",
-   "note": "2027届，网络双选会；拟举办，具体时段另行通知"
-  },
-  {
-   "school": "广西科技大学",
-   "city": "柳州市",
    "name": "广西科技大学2027届毕业生“百日冲刺”双选会暨2028届毕业生实习见习专场招聘会",
    "date": "2027-06-11",
    "date_end": null,
@@ -514,25 +492,14 @@
    "note": "拟举办，上午"
   },
   {
-   "school": "南宁师范大学",
+   "school": "广西财经学院",
    "city": "南宁",
-   "name": "智理资源，数绘空间——南宁师范大学资源·地理·AI·数学联合双选会邀请函",
+   "name": "广西财经学院2027届毕业生秋季校园招聘邀请函",
    "date": "待确认",
    "date_end": null,
    "mode": "",
-   "location": "武鸣校区 图书馆东侧蓝色广场 主办单位：南宁师范大学 指导单位：学生就业中心 承办单位： 自然资源与",
-   "url": "https://nnnu.bysjy.com.cn/detail/jobfair?id=29132",
-   "note": ""
-  },
-  {
-   "school": "广西科技师范学院",
-   "city": "来宾",
-   "name": "现场 广西科技师范学院师范类专场双选会",
-   "date": "待确认",
-   "date_end": null,
-   "mode": "线下",
-   "location": "时间： 202 5 年 7 月 2 8 日（星期 一 ） 9: 0 0—14:00 地点： 广西科技",
-   "url": "https://gxstnu.gxbys.com/jobfair/view/id/40402",
+   "location": "信息，用人单位可以在“宣讲会申请栏”实时查询审核状态",
+   "url": "https://jyxx.gxufe.edu.cn/News/newsXiang.html?cateid=cd403865-981f-6b48-e8e5-4825b43a6e9d&id=5d22442d-dd6d-5d90-ce1c-f4cabebd2bbd",
    "note": ""
   },
   {

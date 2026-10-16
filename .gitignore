@@ -4,3 +4,7 @@ _shot*.log
 _shots/
 _check.log
 _fetch*.log
+
+# 探查/调试脚本与样本（不入库）
+scripts/_*.py
+scripts/_samples/

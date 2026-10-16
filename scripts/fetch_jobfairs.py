@@ -3,14 +3,17 @@
 """
 抓取 12 所广西高校官网就业信息网/官方就业平台的双选会信息，更新 data/jobfairs.json。
 
-架构：
-- 优先用 Playwright 无头浏览器渲染页面（覆盖新锦成/就业宝等 JS 渲染平台）；
-  未安装 Playwright 时自动降级为 requests 静态抓取。
-- 每所学校配置 1 个或多个入口 URL，渲染后从 DOM 提取标题含「双选会/招聘会/
-  供需见面/组团招聘」等关键词的链接 → 进详情页提取举办日期/地点/线上线下。
-- 数据质量守卫（防污染）：
-  1. 跨校过滤：标题含其他高校名、或详情 URL 属第三方聚合平台且标题不含本校名 → 剔除；
-  2. 导航排除：标题是栏目导航文案（校园双选会/招聘信息等）→ 剔除；
+架构（v2 修复版，2026-10-16）：
+- 每个学校按「官方数据通道」优先抓取，DOM 渲染兜底：
+  * 新锦成平台 JSON 接口（广西大学 / 北部湾大学）：GET /module/getjobfairs，字段含
+    meet_day(举办日期) / address(地点) / is_online(线上) / inner_school / is_over；
+    用 inner_school==1 过滤本校场次、is_over!=true 过滤已结束场次。
+  * 桂理工 jy.glut.edu.cn SPA API：GET /api/view/jobFair/list，jobFairType==1 为双选会，
+    startTime 为举办日期。
+  * 其余学校：Playwright 渲染官网列表页 → DOM 提取 → 详情页补日期/地点。
+- 数据质量守卫（防污染，保持 v1）：
+  1. 跨校过滤：标题含其他高校名 → 剔除；
+  2. 导航排除：栏目导航文案 → 剔除；
   3. 日期校验：只保留举办日期 >= 今天 或 日期待确认 的场次；已结束场次自动移除。
 - 抓取失败的学校保留上次数据，并在 meta.schools_status 记录原因（不遗漏原则）。
 
@@ -29,6 +32,7 @@ import json
 import os
 import re
 import sys
+import time
 from urllib.parse import urljoin, urlparse
 
 import requests
@@ -43,13 +47,16 @@ UA = {
 }
 
 # ---------------------------------------------------------------- 12 校配置
-GXBYS = 'https://www.gxbys.com/jobfair'  # 广西毕业生就业网（自治区统一平台，覆盖全区高校承办场次）
+GXBYS = 'https://www.gxbys.com/jobfair'  # 广西毕业生就业网（自治区统一平台，兜底）
 SCHOOLS = [
     {'name': '广西大学', 'city': '南宁', 'domain': 'gxu.edu.cn',
+     'api': {'type': 'bysjy', 'url': 'https://gxu.bysjy.com.cn/module/getjobfairs?start=0&count=100&type=&address=&organisers=&keyword=&day=&panel_id=',
+             'detail': 'https://gxu.bysjy.com.cn/detail/jobfair?id=%s'},
      'urls': ['http://jyy.gxu.edu.cn/module/jobfairs?menu_id=34130',
               'http://jyy.gxu.edu.cn/module/jobfairs', GXBYS]},
     {'name': '广西科技大学', 'city': '柳州', 'domain': 'jiuyeb.cn',
-     'urls': ['http://gxkejidx.jiuyeb.cn/News/zdylist.html?cateid=1',
+     'urls': ['http://gxkejidx.jiuyeb.cn/Chuangye/sxlb.html?status=0',
+              'http://gxkejidx.jiuyeb.cn/News/zdylist.html?cateid=1',
               'http://gxkejidx.jiuyeb.cn/News/zdylist.html', GXBYS]},
     {'name': '桂林电子科技大学', 'city': '桂林', 'domain': 'guet.edu.cn',
      'urls': ['https://jy.guet.edu.cn/module/jobfairs?type=1&menu_id=41860',
@@ -61,26 +68,37 @@ SCHOOLS = [
     {'name': '南宁师范大学', 'city': '南宁', 'domain': 'nnnu.edu.cn',
      'urls': ['https://nnnu.bysjy.com.cn/module/jobfairs', GXBYS]},
     {'name': '桂林理工大学', 'city': '桂林', 'domain': 'glut.edu.cn',
+     'api': {'type': 'glut',
+             'url': 'https://jy.glut.edu.cn/api/view/jobFair/list?pageNum=1&pageSize=50'},
      'urls': ['https://glut.gxbys.com/jobfair/index', 'https://glut.gxbys.com/', GXBYS]},
     {'name': '广西民族大学', 'city': '南宁', 'domain': 'gxmzu.edu.cn',
      'urls': ['https://jyb.gxmzu.edu.cn/module/jobfairs?menu_id=24306', GXBYS]},
     {'name': '广西财经学院', 'city': '南宁', 'domain': 'gxufe.edu.cn',
-     'urls': [GXBYS, 'https://jyxx.gxufe.edu.cn']},
+     'urls': ['https://jyxx.gxufe.edu.cn/News/newsList.html?cateid=cd403865-981f-6b48-e8e5-4825b43a6e9d',
+              'https://jyxx.gxufe.edu.cn', GXBYS]},
     {'name': '广西科技师范学院', 'city': '来宾', 'domain': 'gxstnu.edu.cn',
      'urls': ['https://gxstnu.gxbys.com/', 'https://gxstnu.gxbys.com/jobfair', GXBYS]},
     {'name': '北部湾大学', 'city': '钦州', 'domain': 'bbgu.edu.cn',
-     'urls': ['https://qzhu.bysjy.com.cn/module/jobfairs?type=2&menu_id=13527',
-              'https://qzhu.bysjy.com.cn/module/jobfairs?menu_id=13542', GXBYS]},
+     'api': {'type': 'bysjy', 'url': 'https://qzhu.bysjy.com.cn/module/getjobfairs?start=0&count=100&type=1&address=&organisers=&keyword=&day=&panel_id=',
+             'detail': 'https://qzhu.bysjy.com.cn/detail/jobfair?id=%s'},
+     'urls': ['https://qzhu.bysjy.com.cn/module/jobfairs?menu_id=13524&type=1',
+              'https://qzhu.bysjy.com.cn/module/jobfairs?menu_id=13524&type=2', GXBYS]},
     {'name': '广西工业学院', 'city': '北海', 'domain': 'gliet.edu.cn',
      'urls': ['https://gliet.gxbys.com/jobfair/index', 'https://gliet.gxbys.com/', GXBYS]},
     {'name': '桂林航天工业学院', 'city': '桂林', 'domain': 'guat.edu.cn',
-     'urls': ['https://www.guat.edu.cn/tzgg/tzgg.htm', 'https://news.guat.edu.cn', GXBYS]},
+     'urls': ['https://www.guat.edu.cn/tzgg/tzgg.htm',
+              'https://www.guat.edu.cn/tzgg/tzgg/101.htm',
+              'https://www.guat.edu.cn/tzgg/tzgg/100.htm',
+              'https://news.guat.edu.cn', GXBYS]},
 ]
 
 # 收录关键词（标题命中即视为双选会/招聘会候选）
-INCLUDE_KW = ('双选会', '招聘会', '供需见面', '洽谈会', '组团招聘', '空中双选', '网络招聘会')
+INCLUDE_KW = ('双选会', '招聘会', '供需见面', '洽谈会', '组团招聘', '空中双选', '网络招聘会', '招聘邀请函')
 # 排除关键词（普通宣讲会/职位信息不收录）
 EXCLUDE_KW = ('宣讲会', '招聘简章', '职位发布', '岗位信息', '实习信息', '招聘公告信息')
+# 已确认往届/已办场次的详情 URL（人工核验），新旧数据均剔除
+KNOWN_PAST_URLS = ('nnnu.bysjy.com.cn/detail/jobfair?id=29132',
+                   'gxstnu.gxbys.com/jobfair/view/id/40402')
 # 导航类泛化标题（栏目入口，非具体场次）
 NAV_TITLES = ('校园双选会', '双选会', '招聘会', '校园招聘会', '网络招聘会', '招聘信息',
               '在线招聘', '校园组团招聘会', '组团招聘会', '专场招聘会', '宣讲会')
@@ -156,6 +174,82 @@ def fetch_page(url, use_render):
         except Exception:
             pass
     return fetch_page_requests(url)
+
+
+def fetch_json(url, timeout=25):
+    # 官方接口瞬时抖动常见：做 2 次退避重试，全部失败才抛异常（触发 DOM 兜底）
+    last_err = None
+    for attempt in range(3):
+        try:
+            r = requests.get(url, headers=UA, timeout=timeout)
+            data = r.json()
+            # 新锦成/桂理工接口信封校验：code != 1 视为失败，不静默返回空
+            if isinstance(data, dict) and 'code' in data and data.get('code') != 1:
+                raise RuntimeError('API code=%s' % data.get('code'))
+            return data
+        except Exception as e:
+            last_err = e
+            time.sleep(3 * (attempt + 1))
+    raise RuntimeError('接口请求失败: %s' % str(last_err)[:80])
+
+
+# ---------------------------------------------------------------- 官方数据通道
+def parse_bysjy_api(data, school, detail_tpl):
+    """新锦成 getjobfairs JSON → 本校未来双选会条目。
+
+    过滤规则：inner_school==1（本校场次）、is_over != True（未结束）、
+    meet_day >= 今天、标题命中收录关键词且不含排除关键词。
+    """
+    rows = data.get('data') or []
+    tstr = today().strftime('%Y-%m-%d')
+    items = []
+    for it in rows:
+        if str(it.get('inner_school')) != '1':
+            continue
+        if it.get('is_over') in (True, '1', 'true', 1):
+            continue
+        title = (it.get('title') or '').strip()
+        if not title or not any(k in title for k in INCLUDE_KW):
+            continue
+        if any(k in title for k in EXCLUDE_KW):
+            continue
+        day = (it.get('meet_day') or '').strip()
+        if day and day < tstr:
+            continue
+        mode = '线上' if str(it.get('is_online')) == '1' else ('线上+线下' if str(it.get('is_online')) == '2' else '线下')
+        location = (it.get('address') or '').strip()
+        fair_id = it.get('fair_id')
+        url = detail_tpl % fair_id if fair_id else ''
+        items.append({'title': title, 'url': url, 'date': day or '待确认',
+                      'date_end': None, 'mode': mode, 'location': location})
+    return items
+
+
+def parse_glut_api(data, school):
+    """桂理工 jy.glut.edu.cn /api/view/jobFair/list → 未来双选会条目。
+
+    jobFairType==1 为双选会（2=企业宣讲会）；startTime 为举办日期。
+    """
+    rows = data.get('rows') or []
+    tstr = today().strftime('%Y-%m-%d')
+    items = []
+    for it in rows:
+        if it.get('jobFairType') != 1:
+            continue
+        title = (it.get('jobFairName') or '').strip()
+        if not title or not any(k in title for k in INCLUDE_KW):
+            continue
+        st = (it.get('startTime') or '')[:10]
+        if not st or st < tstr:
+            continue
+        mode = '线上' if it.get('jobFairOnlineType') == 2 else '线下'
+        location = (it.get('jobFairAddress') or it.get('locationOther') or '').strip()
+        fid = it.get('jobFairId')
+        url = 'https://jy.glut.edu.cn/jobfair/detail?jobFairId=%s' % fid if fid else 'https://jy.glut.edu.cn/index'
+        items.append({'title': title, 'url': url, 'date': st,
+                      'date_end': (it.get('endTime') or '')[:10] or None,
+                      'mode': mode, 'location': location})
+    return items
 
 
 # ---------------------------------------------------------------- 解析
@@ -278,11 +372,18 @@ def parse_detail(html, title, school):
         date_end = norm(m.group(2))
     if not date:
         dates = extract_dates(full)
-        d = pick_future_date(dates, today().strftime('%Y-%m-%d'))
-        if d:
-            date = d
+        if dates:
+            d = pick_future_date(dates, today().strftime('%Y-%m-%d'))
+            if d:
+                date = d
+            elif re.search(r'20(27|28)\s*届', title):
+                # 标题含 2027/2028 届次但详情只有过去日期：不遗漏优先，保留待确认
+                date = '待确认'
+            else:
+                # 详情日期全部为过去且标题无未来届次 → 历史/已办场次，剔除
+                date = None
         else:
-            # 提取不到未来日期（可能只有发布/报名日）：不剔除，标"待确认"（不遗漏优先）
+            # 完全提取不到日期：不剔除，标"待确认"（不遗漏优先）
             date = '待确认'
     if not date:
         date = '待确认'
@@ -316,6 +417,29 @@ def fetch_school(school, use_render, school_filter=None):
         return None, None, None
     all_items, seen_urls, errors = [], set(), []
     got_any = False
+
+    # 通道 1：官方数据 API（新锦成 / 桂理工）
+    api = school.get('api')
+    if api:
+        try:
+            data = fetch_json(api['url'])
+            got_any = True
+            if api['type'] == 'bysjy':
+                cands = parse_bysjy_api(data, school, api['detail'])
+            elif api['type'] == 'glut':
+                cands = parse_glut_api(data, school)
+            else:
+                cands = []
+            for c in cands:
+                k = (c['title'], c.get('date'))
+                if k in seen_urls:
+                    continue
+                seen_urls.add(k)
+                all_items.append(c)
+        except Exception as e:
+            errors.append('API %s: %s' % (api['url'][:60], str(e)[:70]))
+
+    # 通道 2：列表页 DOM
     for url in school['urls']:
         try:
             html = fetch_page(url, use_render)
@@ -323,9 +447,31 @@ def fetch_school(school, use_render, school_filter=None):
                 errors.append('空页面 %s' % url)
                 continue
             cands = parse_list_html(html, url, school)
+            # 科技大（就业宝）sxlb：<a> 文本为 日期+标题+统计+地点+状态 拼接，标题截到"双选会/招聘会/邀请函"为止
+            if name == '广西科技大学' and 'sxlb' in url:
+                for c in cands:
+                    m = re.search(r'(.+?(?:双选会|招聘会|邀请函))', c['title'])
+                    if m:
+                        c['title'] = m.group(1).strip()
+            # 财经学院通知公告：仅收"邀请函"且面向 2027/2028 届的招聘/双选通知（剔除历史活动/转发热点），并清洗编号/发布月前缀
+            if name == '广西财经学院':
+                cleaned = []
+                for c in cands:
+                    t = re.sub(r'^\d{1,3}\s+20\d{2}[-/.]\d{1,2}\s*【[^】]*】\s*', '', c['title'])
+                    t = re.sub(r'^(现场|网络|线上|线下|空中)\s*', '', t).strip()
+                    t = re.split(r'尊敬的|尊敬', t)[0].strip()
+                    if re.search(r'20\d{2}[-/.]0[1-9](?:[-/.]\d{1,2})?', t) and not re.search(r'20(27|28)\s*届', t):
+                        continue  # 过去月份活动（无未来届次）→ 历史通知
+                    if ('邀请函' in t and ('招聘' in t or '双选' in t)
+                            and ('2027' in t or '2028' in t or name in t)):
+                        c['title'] = t
+                        cleaned.append(c)
+                cands = cleaned
             got_any = True
             for c in cands:
                 if c['url'] in seen_urls:
+                    continue
+                if any(p in c['url'] for p in KNOWN_PAST_URLS):
                     continue
                 seen_urls.add(c['url'])
                 all_items.append(c)
@@ -336,6 +482,20 @@ def fetch_school(school, use_render, school_filter=None):
 
     items = []
     for c in all_items:
+        if c.get('date') is not None and c.get('url'):
+            # API 通道已带完整字段
+            items.append({
+                'school': name,
+                'city': school['city'],
+                'name': c['title'],
+                'date': c.get('date'),
+                'date_end': c.get('date_end'),
+                'mode': c.get('mode', ''),
+                'location': c.get('location', ''),
+                'url': c.get('url'),
+                'note': '',
+            })
+            continue
         try:
             detail_html = fetch_page(c['url'], use_render)
             info = parse_detail(detail_html, c['title'], school)
@@ -369,40 +529,92 @@ def load_old():
 
 
 def norm_title(t):
-    """标题规范化用于去重：去修饰前缀（现场/网络/【..】）与公告后缀（邀请函/通知）。"""
+    """标题规范化用于去重：去修饰前缀（现场/网络/【..】/日期/编号/公文前缀）与公告后缀（邀请函/通知/双选会）。"""
     t = (t or '').strip()
+    t = re.sub(r'^(关于组织参加|关于参加|组织参加|关于举办)\s*', '', t)
     t = re.sub(r'^(现场|网络|线上|线下|空中)\s*', '', t)
     t = re.sub(r'^【[^】]*】\s*', '', t)
+    # 日期/时间前缀：2026-10-27 14:00 …、2026-08 …
+    t = re.sub(r'^(20\d{2}[-/.]\d{1,2}[-/.]\d{1,2})\s+\d{1,2}:\d{2}\s*', '', t)
+    t = re.sub(r'^(20\d{2}[-/.]\d{1,2}[-/.]\d{1,2})\s*', '', t)
+    # 编号+发布月前缀：13 2026-08 【Top】…
+    t = re.sub(r'^\d{1,3}\s+20\d{2}[-/.]\d{1,2}\s*【[^】]*】\s*', '', t)
+    t = re.sub(r'^20\d{2}[-/.]\d{1,2}\s*【[^】]*】\s*', '', t)
+    # 结尾发布日期/时间后缀：…的通知 2026-10-10
+    t = re.sub(r'\s+(20\d{2})[-/.](\d{1,2})[-/.](\d{1,2})\s*$', '', t)
+    t = re.sub(r'\.\.\.$', '', t)
+    t = re.split(r'尊敬的|尊的', t)[0].strip()  # 先去掉正文粘连（邀请函 尊敬的用人单位…）
     t = re.sub(r'(邀请函|的通知|通知公告|公告)$', '', t)
+    # 同一场次的"双选会/招聘会"口径差异归一（不同名仅差此后缀视为同场）
+    t = re.sub(r'(双选会|招聘会)$', '', t)
+    t = re.sub(r'双选$', '', t)
     return t.strip()
+
+
+def title_score(t):
+    """标题规范度打分：越完整规范越高（去重时保留高分者）。"""
+    s = 0
+    if not re.match(r'^\d{4}[-/.]\d{1,2}', t):
+        s += 2          # 无日期前缀
+    if '双选会' in t or '招聘会' in t or '招聘' in t:
+        s += 1
+    if '通知' not in t:
+        s += 1
+    if '邀请函' in t:
+        s += 1
+    return s
+
+
+def key_title(it):
+    """去重键用标题：科技大 sxlb 旧数据带"标题+统计+地点+状态"拼接，先截到双选会/招聘会/邀请函为止。
+    仅对含统计/状态特征的标题截断（"X 家用人单位 Y 个职位 / Z人 … 待举办"），干净标题（如网络双选会第一/二场）不截断。"""
+    t = it.get('name') or ''
+    if it.get('school') == '广西科技大学' and re.search(r'待举办|家用人单位|个职位', t):
+        m = re.search(r'(.+?(?:双选会|招聘会|邀请函))', t)
+        if m:
+            t = m.group(1)
+    return t
 
 
 def merge_and_filter(new_by_school, old):
     tstr = today().strftime('%Y-%m-%d')
     old_items = (old or {}).get('jobfairs', [])
 
-    merged, seen_key = [], set()
+    merged_map = {}
     for school in SCHOOLS:
-        items = new_by_school.get(school['name'])
         candidates = []
-        if items:
-            candidates += items
+        if new_by_school.get(school['name']):
+            candidates += new_by_school[school['name']]
         # 旧数据作为兜底（合并，不覆盖）
         for it in old_items:
-            if it.get('school') == school['name']:
-                candidates.append(it)
-        for it in candidates:
-            # 同一学校同一规范化标题视为同一场次（种子数据中同校多场可能共用同一入口 URL，不能按 URL 去重）
-            key = (it.get('school'), norm_title(it.get('name')))
-            if key in seen_key:
+            if it.get('school') != school['name']:
                 continue
-            seen_key.add(key)
-            merged.append(it)
+            if any(p in (it.get('url') or '') for p in KNOWN_PAST_URLS):
+                continue  # 已确认往届/已办场次
+            # 旧数据守卫：历史垃圾（已办/往届/去年已过月份通知）不再兜底
+            t = it.get('name') or ''
+            if '已举办' in t or '已结束' in t:
+                continue
+            mj = re.findall(r'(20\d{2})\s*届', t)
+            if mj and all(g not in ('2027', '2028') for g in mj):
+                continue
+            if re.search(r'20\d{2}[-/.]0[1-9](?:[-/.]\d{1,2})?', t) and not re.search(r'20(27|28)\s*届', t):
+                continue
+            candidates.append(it)
+        for it in candidates:
+            # 同一学校同一规范化标题视为同一场次；同标题多条时保留标题更规范的
+            key = (it.get('school'), norm_title(key_title(it)))
+            if key not in merged_map or title_score(key_title(it)) > title_score(key_title(merged_map[key])):
+                merged_map[key] = it
+
+    merged = list(merged_map.values())
 
     kept = []
     for it in merged:
         d = it.get('date')
-        if d and d != '待确认':
+        if not d:
+            continue  # 已过/历史场次（解析判定 date=None）
+        if d != '待确认':
             if d < tstr:
                 continue
         kept.append(it)
