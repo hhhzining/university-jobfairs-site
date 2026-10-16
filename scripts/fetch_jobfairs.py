@@ -118,10 +118,10 @@ OTHER_NAMES = ('广西大学', '广西科技大学', '桂林电子科技大学',
 OTHER_NAMES_PAT = re.compile('|'.join(sorted(OTHER_NAMES, key=len, reverse=True)))
 
 # 日期正则
-RE_DATE_MMDD_YYYY = re.compile(r'(\d{1,2})[-/.](\d{1,2})\s+(20\d{2})')          # 09-18 2026
-RE_DATE_FULL = re.compile(r'(20\d{2})[-/.](\d{1,2})[-/.](\d{1,2})')            # 2026-10-16
-RE_DATE_CN = re.compile(r'(20\d{2})\s*年\s*(\d{1,2})\s*月\s*(\d{1,2})\s*日')   # 2026年10月16日
-RE_DATE_MD = re.compile(r'(\d{1,2})\s*月\s*(\d{1,2})\s*日')                    # 10月16日（无年份）
+RE_DATE_MMDD_YYYY = re.compile(r'(\d{1,2})[-/.]\d{1,2}\s+(20\d{2})')          # 09-18 2026
+RE_DATE_FULL = re.compile(r'(20\d{2})[-/.]\d{1,2}[-/.]\d{1,2}')            # 2026-10-16
+RE_DATE_CN = re.compile(r'(20\d{2})\s*年\s*\d{1,2}\s*月\s*\d{1,2}\s*日')   # 2026年10月16日
+RE_DATE_MD = re.compile(r'\d{1,2}\s*月\s*\d{1,2}\s*日')                    # 10月16日（无年份）
 RE_DATE_RANGE = re.compile(r'(20\d{2}[-/.]\d{1,2}[-/.]\d{1,2})\s*[~至到—\-]\s*(20\d{2}[-/.]\d{1,2}[-/.]\d{1,2})')
 
 
@@ -541,7 +541,7 @@ def norm_title(t):
     t = re.sub(r'^\d{1,3}\s+20\d{2}[-/.]\d{1,2}\s*【[^】]*】\s*', '', t)
     t = re.sub(r'^20\d{2}[-/.]\d{1,2}\s*【[^】]*】\s*', '', t)
     # 结尾发布日期/时间后缀：…的通知 2026-10-10
-    t = re.sub(r'\s+(20\d{2})[-/.](\d{1,2})[-/.](\d{1,2})\s*$', '', t)
+    t = re.sub(r'\s+(20\d{2})[-/.]\d{1,2}[-/.]\d{1,2}\s*$', '', t)
     t = re.sub(r'\.\.\.$', '', t)
     t = re.split(r'尊敬的|尊的', t)[0].strip()  # 先去掉正文粘连（邀请函 尊敬的用人单位…）
     t = re.sub(r'(邀请函|的通知|通知公告|公告)$', '', t)
@@ -671,6 +671,17 @@ def main():
             status_map[school['name']] = old_status.get(school['name'], {'status': '待查', 'note': ''})
 
     kept = merge_and_filter(new_by_school, old)
+
+    # ---- v3 修复：schools_status 必须与最终合并数据一致 ----
+    # 只要最终数据里该校存在未来场次（含旧数据兜底），状态即为"已查-有未来场次"，
+    # 避免本次抓取偶发解析不到时误标"暂无"，导致页面高校覆盖与场次明细矛盾。
+    from collections import Counter
+    _kept_count = Counter(it.get('school') for it in kept)
+    for _s in SCHOOLS:
+        _n = _kept_count.get(_s['name'], 0)
+        if _n > 0 and status_map.get(_s['name'], {}).get('status') != '已查-有未来场次':
+            status_map[_s['name']] = {'status': '已查-有未来场次',
+                                      'note': '本次抓取合并后共 %d 条（含历史保留）' % _n}
 
     data = {
         'meta': {
