@@ -210,16 +210,30 @@
     wrap.innerHTML = html;
   }
 
+  // 从公告原文（地点/备注）中提取时间信息，如"上午 9:30"；匹配不到返回空串（不编造）
+  function timeInfo(it) {
+    var src = ((it.location || '') + ' ' + (it.note || ''));
+    var period = '';
+    var pm = src.match(/上午|下午|晚上|中午/);
+    if (pm) period = pm[0];
+    var hm = src.match(/(\d{1,2})\s*[:：]\s*(\d{2})/);
+    var hmTxt = '';
+    if (hm && +hm[1] >= 6 && +hm[1] <= 23) hmTxt = hm[1] + ':' + hm[2];
+    if (!period && !hmTxt) return '';
+    return (period ? period : '') + (hmTxt ? (period ? ' ' : '') + hmTxt : '');
+  }
+
   function rowHtml(it, t, idx) {
     var delay = Math.min((idx || 0) * 0.02, 0.4);
     var dd = it.date || '';
-    var dayHtml, badgeHtml;
+    var dayHtml, hot = false;
     if (isRealDate(dd)) {
       var f = fmtDate(dd);
       var days = Math.round((new Date(+f.y, +f.m - 1, +f.d) - new Date(+t.split('-')[0], +t.split('-')[1] - 1, +t.split('-')[2])) / 86400000);
       var badge;
-      if (days === 0) { badge = '<span class="fd-badge today">今天</span>'; }
-      else if (days === 1) { badge = '<span class="fd-badge tomorrow">明天</span>'; }
+      if (days === 0) { badge = '<span class="fd-badge today">今天举行</span>'; hot = true; }
+      else if (days === 1) { badge = '<span class="fd-badge tomorrow">明天</span>'; hot = true; }
+      else if (days === 2) { badge = '<span class="fd-badge dayafter">后天</span>'; hot = true; }
       else if (days <= 7) { badge = '<span class="fd-badge soon">' + days + ' 天后</span>'; }
       else { badge = '<span class="fd-badge later"></span>'; }
       dayHtml = '<span class="fd-day">' + f.m + '/' + f.d + '</span><span class="fd-ym">' + f.y + '年</span>' + badge;
@@ -234,8 +248,9 @@
     var tagTxt = mode || '待确认';
     var loc = (it.location || '').trim();
     var note = (it.note || '').trim();
+    var timeTxt = timeInfo(it);
 
-    return '<div class="fair-row" role="row" style="animation-delay:' + delay + 's">' +
+    return '<div class="fair-row' + (hot ? ' hot' : '') + '" role="row" style="animation-delay:' + delay + 's">' +
         '<div class="f-date" role="cell">' + dayHtml + '</div>' +
         '<div class="f-main" role="cell">' +
           '<div class="f-title-row">' +
@@ -247,6 +262,7 @@
           '<div class="f-meta">' +
             '<span class="f-school">' + esc(it.school) + (it.city ? '<span class="f-city">' + esc(it.city) + '</span>' : '') + '</span>' +
             '<span class="tag ' + tagCls + '">' + esc(tagTxt) + '</span>' +
+            (timeTxt ? '<span class="f-time"><svg width="12" height="12" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 7v5l3 2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>' + esc(timeTxt) + '</span>' : '') +
             (loc && loc !== '待确认' ? '<span class="f-loc"><svg width="12" height="12" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-5.1-7-11a7 7 0 1 1 14 0c0 5.9-7 11-7 11z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.5" fill="none" stroke="currentColor" stroke-width="2"/></svg><span>' + esc(loc) + '</span></span>' : '') +
           '</div>' +
           (note ? '<p class="f-note">' + esc(note) + '</p>' : '') +
