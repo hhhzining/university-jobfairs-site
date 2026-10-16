@@ -257,7 +257,11 @@ def extract_dates(text):
     """提取带年份日期列表（优先）；无年份的仅在无任何带年份日期时作为兜底。"""
     dates = []
     for m in RE_DATE_MMDD_YYYY.finditer(text):
-        mo, d, y = int(m.group(1)), int(m.group(2)), int(m.group(3))
+        mo = int(m.group(1))
+        y = int(m.group(2))
+        seg = text[m.start():m.end()]
+        parts = re.split(r'[-/.]', seg.split()[0])
+        d = int(parts[1]) if len(parts) == 2 else 0
         if 1 <= mo <= 12 and 1 <= d <= 31:
             dates.append('%04d-%02d-%02d' % (y, mo, d))
     for m in RE_DATE_FULL.finditer(text):
@@ -308,7 +312,11 @@ def is_own_fair(title, url, school):
             return False
     # 标题含明确的过去日期（就业宝"09-18 2026 学校举办…"新闻格式）
     for m in RE_DATE_MMDD_YYYY.finditer(title):
-        y, mo, d = int(m.group(3)), int(m.group(1)), int(m.group(2))
+        mo = int(m.group(1))
+        y = int(m.group(2))
+        seg = title[m.start():m.end()]
+        parts = re.split(r'[-/.]', seg.split()[0])
+        d = int(parts[1]) if len(parts) == 2 else 0
         if '%04d-%02d-%02d' % (y, mo, d) < today().strftime('%Y-%m-%d'):
             return False
     # 标题含其他高校名 → 剔除（本校名出现则不剔除）
