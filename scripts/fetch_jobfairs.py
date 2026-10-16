@@ -121,7 +121,7 @@ OTHER_NAMES_PAT = re.compile('|'.join(sorted(OTHER_NAMES, key=len, reverse=True)
 RE_DATE_MMDD_YYYY = re.compile(r'([0-9]{1,2})[-/.]\d{1,2}[ ]+(20[0-9]{2})')          # 09-18 2026
 RE_DATE_FULL = re.compile(r'(20\d{2})[-/.]\d{1,2}[-/.]\d{1,2}')            # 2026-10-16
 RE_DATE_CN = re.compile(r'(20\d{2})\s*年\s*\d{1,2}\s*月\s*\d{1,2}\s*日')   # 2026年10月16日
-RE_DATE_MD = re.compile(r'\d{1,2}\s*月\s*\d{1,2}\s*日')                    # 10月16日（无年份）
+RE_DATE_MD = re.compile(r'(\d{1,2})\s*月\s*(\d{1,2})\s*日')                # 10月16日（无年份）
 RE_DATE_RANGE = re.compile(r'(20\d{2}[-/.]\d{1,2}[-/.]\d{1,2})\s*[~至到—\-]\s*(20\d{2}[-/.]\d{1,2}[-/.]\d{1,2})')
 
 
