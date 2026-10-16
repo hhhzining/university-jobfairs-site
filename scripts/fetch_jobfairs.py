@@ -118,10 +118,10 @@ OTHER_NAMES = ('广西大学', '广西科技大学', '桂林电子科技大学',
 OTHER_NAMES_PAT = re.compile('|'.join(sorted(OTHER_NAMES, key=len, reverse=True)))
 
 # 日期正则
-RE_DATE_MMDD_YYYY = re.compile(r'([0-9]{1,2})[-/.]\d{1,2}[ ]+(20[0-9]{2})')          # 09-18 2026
-RE_DATE_FULL = re.compile(r'(20\d{2})[-/.]\d{1,2}[-/.]\d{1,2}')            # 2026-10-16
-RE_DATE_CN = re.compile(r'(20\d{2})\s*年\s*\d{1,2}\s*月\s*\d{1,2}\s*日')   # 2026年10月16日
-RE_DATE_MD = re.compile(r'(\d{1,2})\s*月\s*(\d{1,2})\s*日')                # 10月16日（无年份）
+RE_DATE_MMDD_YYYY = re.compile(r'(\d{1,2})[-/.](\d{1,2})\s+(20\d{2})')          # 09-18 2026
+RE_DATE_FULL = re.compile(r'(20\d{2})[-/.](\d{1,2})[-/.](\d{1,2})')            # 2026-10-16
+RE_DATE_CN = re.compile(r'(20\d{2})\s*年\s*(\d{1,2})\s*月\s*(\d{1,2})\s*日')   # 2026年10月16日
+RE_DATE_MD = re.compile(r'(\d{1,2})\s*月\s*(\d{1,2})\s*日')                    # 10月16日（无年份）
 RE_DATE_RANGE = re.compile(r'(20\d{2}[-/.]\d{1,2}[-/.]\d{1,2})\s*[~至到—\-]\s*(20\d{2}[-/.]\d{1,2}[-/.]\d{1,2})')
 
 
@@ -257,27 +257,15 @@ def extract_dates(text):
     """提取带年份日期列表（优先）；无年份的仅在无任何带年份日期时作为兜底。"""
     dates = []
     for m in RE_DATE_MMDD_YYYY.finditer(text):
-        mo = int(m.group(1))
-        y = int(m.group(2))
-        seg = text[m.start():m.end()]
-        parts = re.split(r'[-/.]', seg.split()[0])
-        d = int(parts[1]) if len(parts) == 2 else 0
+        mo, d, y = int(m.group(1)), int(m.group(2)), int(m.group(3))
         if 1 <= mo <= 12 and 1 <= d <= 31:
             dates.append('%04d-%02d-%02d' % (y, mo, d))
     for m in RE_DATE_FULL.finditer(text):
-        y = int(m.group(1))
-        seg = text[m.start():m.end()]
-        parts = re.split(r'[-/.]', seg)
-        mo = int(parts[1]) if len(parts) >= 2 else 0
-        d = int(parts[2]) if len(parts) >= 3 else 0
+        y, mo, d = int(m.group(1)), int(m.group(2)), int(m.group(3))
         if 1 <= mo <= 12 and 1 <= d <= 31:
             dates.append('%04d-%02d-%02d' % (y, mo, d))
     for m in RE_DATE_CN.finditer(text):
-        y = int(m.group(1))
-        seg = text[m.start():m.end()]
-        parts = re.split(r'年|月|日', seg)
-        mo = int(parts[1]) if len(parts) >= 2 else 0
-        d = int(parts[2]) if len(parts) >= 3 else 0
+        y, mo, d = int(m.group(1)), int(m.group(2)), int(m.group(3))
         if 1 <= mo <= 12 and 1 <= d <= 31:
             dates.append('%04d-%02d-%02d' % (y, mo, d))
     if not dates:
@@ -320,11 +308,7 @@ def is_own_fair(title, url, school):
             return False
     # 标题含明确的过去日期（就业宝"09-18 2026 学校举办…"新闻格式）
     for m in RE_DATE_MMDD_YYYY.finditer(title):
-        mo = int(m.group(1))
-        y = int(m.group(2))
-        seg = title[m.start():m.end()]
-        parts = re.split(r'[-/.]', seg.split()[0])
-        d = int(parts[1]) if len(parts) == 2 else 0
+        y, mo, d = int(m.group(3)), int(m.group(1)), int(m.group(2))
         if '%04d-%02d-%02d' % (y, mo, d) < today().strftime('%Y-%m-%d'):
             return False
     # 标题含其他高校名 → 剔除（本校名出现则不剔除）
@@ -557,7 +541,7 @@ def norm_title(t):
     t = re.sub(r'^\d{1,3}\s+20\d{2}[-/.]\d{1,2}\s*【[^】]*】\s*', '', t)
     t = re.sub(r'^20\d{2}[-/.]\d{1,2}\s*【[^】]*】\s*', '', t)
     # 结尾发布日期/时间后缀：…的通知 2026-10-10
-    t = re.sub(r'\s+(20\d{2})[-/.]\d{1,2}[-/.]\d{1,2}\s*$', '', t)
+    t = re.sub(r'\s+(20\d{2})[-/.](\d{1,2})[-/.](\d{1,2})\s*$', '', t)
     t = re.sub(r'\.\.\.$', '', t)
     t = re.split(r'尊敬的|尊的', t)[0].strip()  # 先去掉正文粘连（邀请函 尊敬的用人单位…）
     t = re.sub(r'(邀请函|的通知|通知公告|公告)$', '', t)
@@ -688,16 +672,27 @@ def main():
 
     kept = merge_and_filter(new_by_school, old)
 
-    # ---- v3 修复：schools_status 必须与最终合并数据一致 ----
-    # 只要最终数据里该校存在未来场次（含旧数据兜底），状态即为"已查-有未来场次"，
-    # 避免本次抓取偶发解析不到时误标"暂无"，导致页面高校覆盖与场次明细矛盾。
-    from collections import Counter
-    _kept_count = Counter(it.get('school') for it in kept)
-    for _s in SCHOOLS:
-        _n = _kept_count.get(_s['name'], 0)
-        if _n > 0 and status_map.get(_s['name'], {}).get('status') != '已查-有未来场次':
-            status_map[_s['name']] = {'status': '已查-有未来场次',
-                                      'note': '本次抓取合并后共 %d 条（含历史保留）' % _n}
+    # 状态校正：以最终保留数据为准——有未来场次即显示"有"，
+    # 避免"本次实时未解析到、但历史兜底保留"的学校被误标为"暂无"（如桂电/南宁师大/桂理工的
+    # 跨平台场次：官网列表未同步、场次来自自治区安排表/云校招平台，实时解析不到属正常）
+    kept_by_school = {}
+    for it in kept:
+        kept_by_school.setdefault(it['school'], []).append(it)
+    for school in SCHOOLS:
+        name = school['name']
+        cur = status_map.get(name, {})
+        rows = kept_by_school.get(name, [])
+        if rows:
+            fresh = len(new_by_school.get(name, []) or [])
+            if fresh:
+                note = '本次抓取 %d 条，累计 %d 条' % (fresh, len(rows))
+            else:
+                note = '本次实时未解析到，历史保留 %d 条（官网未同步/跨平台场次）' % len(rows)
+            status_map[name] = {'status': '已查-有未来场次', 'note': note}
+        else:
+            if not cur or cur.get('status', '').startswith('已查-'):
+                status_map[name] = {'status': '已查-暂无未来场次',
+                                    'note': (cur.get('note') or '未查询到未来双选会条目')}
 
     data = {
         'meta': {
