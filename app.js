@@ -161,6 +161,7 @@
     renderList(slice, t);
     renderPager(total, pages);
     renderSchools(d);
+    renderFloater(active, t);
   }
 
   function dateKey(it) {
@@ -320,6 +321,61 @@
         '</a>';
     });
     grid.innerHTML = html;
+  }
+
+  // ---- 右下角悬浮框：今日双选会提示（当天关闭后不再显示） ----
+  function renderFloater(active, t) {
+    var old = $('todayFloater');
+    if (old) old.remove();
+    var today = active.filter(function (it) { return isRealDate(it.date) && it.date === t; });
+    var closedToday = false;
+    try { closedToday = sessionStorage.getItem('floaterClosed') === t; } catch (e) { /* 隐私模式忽略 */ }
+    if (!today.length || closedToday) return;
+
+    var f = fmtDate(t);
+    var w = document.createElement('div');
+    w.id = 'todayFloater';
+    w.className = 'floater';
+    w.innerHTML =
+      '<button type="button" class="floater-fab" aria-expanded="false" aria-label="今日双选会提示">' +
+        '<span class="floater-dot" aria-hidden="true"></span>' +
+        '<span class="floater-txt"><b>' + today.length + '</b> 场今日双选会</span>' +
+        '<svg class="floater-chev" width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+      '</button>' +
+      '<div class="floater-panel" hidden>' +
+        '<div class="floater-head"><span>' + f.m + '/' + f.d + ' · 今日双选会</span>' +
+          '<button type="button" class="floater-close" aria-label="关闭提示">' +
+            '<svg width="13" height="13" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>' +
+          '</button></div>' +
+        '<div class="floater-list">' +
+          today.map(function (it) {
+            var ti = timeInfo(it);
+            var loc = (it.location || '').trim();
+            var metaParts = [];
+            if (ti) metaParts.push(ti);
+            if (loc && loc !== '待确认') metaParts.push(loc);
+            return '<a class="floater-item" href="' + esc(it.url) + '" target="_blank" rel="noopener">' +
+              '<span class="fi-school">' + esc(it.school) + (it.mode ? ' · ' + esc(it.mode) : '') + '</span>' +
+              '<span class="fi-name">' + esc(it.name) + '</span>' +
+              (metaParts.length ? '<span class="fi-meta">' + esc(metaParts.join(' · ')) + '</span>' : '') +
+            '</a>';
+          }).join('') +
+        '</div>' +
+      '</div>';
+    document.body.appendChild(w);
+
+    var fab = w.querySelector('.floater-fab');
+    var panel = w.querySelector('.floater-panel');
+    fab.addEventListener('click', function () {
+      var willOpen = panel.hidden;
+      panel.hidden = !willOpen;
+      fab.setAttribute('aria-expanded', String(willOpen));
+      fab.classList.toggle('open', willOpen);
+    });
+    w.querySelector('.floater-close').addEventListener('click', function () {
+      try { sessionStorage.setItem('floaterClosed', t); } catch (e) { /* 忽略 */ }
+      w.remove();
+    });
   }
 
   // ---- 交互 ----

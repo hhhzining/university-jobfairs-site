@@ -9,20 +9,28 @@ on:
   workflow_dispatch:   # 支持在 GitHub Actions 页面手动触发
   push:
     branches: [main]
+    # 仅前端页面 / 工作流文件变更才触发本流程；
+    # 每日 08:00 的抓取脚本自动提交 data/jobfairs.json 时不再触发（避免重复跑部署）
+    paths:
+      - 'index.html'
+      - 'style.css'
+      - 'app.js'
+      - '.github/workflows/**'
 
 permissions:
   contents: write
   pages: write
   id-token: write
 
-concurrency:
-  group: daily-update
-  cancel-in-progress: false
-
 jobs:
   update:
+    # 只在定时 / 手动触发时抓取数据；纯前端 push 跳过抓取，直接走部署
+    if: ${{ github.event_name != 'push' }}
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    concurrency:
+      group: data-update
+      cancel-in-progress: false
     steps:
       - name: 检出仓库
         uses: actions/checkout@v4
@@ -55,10 +63,16 @@ jobs:
 
   deploy:
     needs: update
+    # update 被跳过（前端 push）或成功时都部署；update 失败则不部署
+    if: ${{ !cancelled() && !failure() }}
     runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+    # 部署可随时取消重来：连续推送多个 commit 时，旧的部署自动让位给最新
+    concurrency:
+      group: pages-deploy
+      cancel-in-progress: true
     steps:
       - name: 检出仓库
         uses: actions/checkout@v4
@@ -78,8 +92,13 @@ jobs:
   # 每天 19:00（北京时间）发送邮件：未来 7 天双选会 + 明天场次重点标记
   email-report:
     needs: update
+    # 只在 19:00 的定时触发时运行（push / 08:00 数据更新不发送）
+    if: ${{ github.event.schedule == '0 11 * * *' }}
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    concurrency:
+      group: data-update
+      cancel-in-progress: false
     steps:
       - name: 检出仓库
         uses: actions/checkout@v4
