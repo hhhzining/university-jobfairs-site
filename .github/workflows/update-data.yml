@@ -64,6 +64,7 @@ jobs:
   deploy:
     needs: update
     # update 被跳过（前端 push）或成功时都部署；update 失败则不部署
+    # 2026-10-17: 手动触发时请确认 ref 为 main（此前手动触发误用旧版本覆盖了线上数据）
     if: ${{ !cancelled() && !failure() }}
     runs-on: ubuntu-latest
     environment:
