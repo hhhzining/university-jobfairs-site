@@ -17,6 +17,24 @@
   --accent-deep: #173a9e;
   --accent-soft: #eaf0fd;
   --accent-line: #c7d7f7;
+  /* 近三天分档色（今天红 / 明天琥珀 / 后天青绿） */
+  --today: #e5484d;
+  --today-deep: #c22f35;
+  --today-soft: #fdecec;
+  --today-line: #f6c4c7;
+  --tomorrow: #e8890c;
+  --tomorrow-deep: #b96b06;
+  --tomorrow-soft: #fdf3e1;
+  --tomorrow-line: #f4d9ac;
+  --dayafter: #0e8f6f;
+  --dayafter-deep: #0a6a52;
+  --dayafter-soft: #e6f6ef;
+  --dayafter-line: #b7e2d2;
+  /* 线上形式（青蓝）与成功（绿） */
+  --online: #0e7490;
+  --online-soft: #e3f2f6;
+  --online-line: #b6dce6;
+  --ok: #16a34a;
   --shadow-sm: 0 1px 2px rgba(15, 23, 42, .05), 0 2px 6px rgba(15, 23, 42, .04);
   --shadow-md: 0 8px 22px rgba(15, 23, 42, .10);
   --radius: 14px;
@@ -112,7 +130,13 @@ a { color: var(--ink); }
   content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
   background: var(--accent); opacity: .9;
 }
+.kpi-item.kpi-near::before { background: var(--tomorrow); }
+.kpi-item.kpi-schools::before { background: var(--ok); }
+.kpi-item.kpi-online::before { background: var(--online); }
 .kpi-ico { width: 22px; height: 22px; color: var(--accent); margin-bottom: 4px; }
+.kpi-item.kpi-near .kpi-ico { color: var(--tomorrow); }
+.kpi-item.kpi-schools .kpi-ico { color: var(--ok); }
+.kpi-item.kpi-online .kpi-ico { color: var(--online); }
 .kpi-num {
   font-size: 26px; font-weight: 800; color: var(--ink);
   font-variant-numeric: tabular-nums; line-height: 1.15;
@@ -219,19 +243,45 @@ a { color: var(--ink); }
   border-color: var(--accent-line);
 }
 
-/* 近三天场次（今天/明天/后天）：整卡强化 */
-.fair-row.hot {
-  border-color: var(--accent-line);
-  background: linear-gradient(180deg, #ffffff 0%, #f3f8ff 100%);
-  box-shadow: 0 6px 18px rgba(29, 78, 216, .10);
+/* 近三天场次（今天/明天/后天）：整卡分档强化 */
+.fair-row.hot-today {
+  border-color: var(--today-line);
+  background: linear-gradient(180deg, #ffffff 0%, #fdf3f3 100%);
+  box-shadow: 0 6px 18px rgba(229, 72, 77, .12);
 }
-.fair-row.hot::before {
+.fair-row.hot-today::before {
   content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
   border-radius: var(--radius) 0 0 var(--radius);
-  background: linear-gradient(180deg, var(--accent-deep), var(--accent));
+  background: linear-gradient(180deg, var(--today-deep), var(--today));
 }
-.fair-row.hot .f-date { background: var(--accent-soft); border-color: var(--accent-line); }
-.fair-row.hot .f-title { color: var(--accent-deep); }
+.fair-row.hot-today .f-date { background: var(--today-soft); border-color: var(--today-line); }
+.fair-row.hot-today .f-title { color: var(--today-deep); }
+
+.fair-row.hot-tomorrow {
+  border-color: var(--tomorrow-line);
+  background: linear-gradient(180deg, #ffffff 0%, #fdf8ee 100%);
+  box-shadow: 0 6px 18px rgba(232, 137, 12, .12);
+}
+.fair-row.hot-tomorrow::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
+  border-radius: var(--radius) 0 0 var(--radius);
+  background: linear-gradient(180deg, var(--tomorrow-deep), var(--tomorrow));
+}
+.fair-row.hot-tomorrow .f-date { background: var(--tomorrow-soft); border-color: var(--tomorrow-line); }
+.fair-row.hot-tomorrow .f-title { color: var(--tomorrow-deep); }
+
+.fair-row.hot-dayafter {
+  border-color: var(--dayafter-line);
+  background: linear-gradient(180deg, #ffffff 0%, #f0faf6 100%);
+  box-shadow: 0 6px 18px rgba(14, 143, 111, .12);
+}
+.fair-row.hot-dayafter::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
+  border-radius: var(--radius) 0 0 var(--radius);
+  background: linear-gradient(180deg, var(--dayafter-deep), var(--dayafter));
+}
+.fair-row.hot-dayafter .f-date { background: var(--dayafter-soft); border-color: var(--dayafter-line); }
+.fair-row.hot-dayafter .f-title { color: var(--dayafter-deep); }
 
 /* 日期徽标（日历卡风格） */
 .f-date {
@@ -242,19 +292,32 @@ a { color: var(--ink); }
 }
 .fd-day { font-size: 16.5px; font-weight: 800; color: var(--ink); font-variant-numeric: tabular-nums; line-height: 1.2; }
 .fd-ym { font-size: 10px; color: var(--ink-3); white-space: nowrap; letter-spacing: .03em; }
-.fd-badge { margin-top: 3px; font-size: 10px; font-weight: 800; padding: 1.5px 9px; border-radius: 999px; white-space: nowrap; letter-spacing: .02em; }
+.fd-badge { margin-top: 4px; font-size: 10px; font-weight: 800; padding: 2px 10px 2px 8px; border-radius: 4px 999px 999px 4px; white-space: nowrap; letter-spacing: .02em; position: relative; }
+/* 近三天：斜切角标（缎带感）+ 分档配色 */
+.fd-badge.today, .fd-badge.tomorrow, .fd-badge.dayafter {
+  clip-path: polygon(8px 0, 100% 0, 100% 100%, 8px 100%, 0 50%);
+  color: #fff;
+}
 .fd-badge.today {
-  background: linear-gradient(135deg, var(--accent-deep), var(--accent));
-  color: #fff; font-size: 11px; padding: 2.5px 11px;
-  box-shadow: 0 3px 8px rgba(29, 78, 216, .40);
+  background: linear-gradient(135deg, var(--today-deep), var(--today));
+  font-size: 11px; padding: 3px 12px 3px 9px;
+  box-shadow: 0 3px 9px rgba(229, 72, 77, .42);
+}
+.fd-badge.today::before {
+  content: ''; display: inline-block; width: 5px; height: 5px; border-radius: 50%;
+  background: #fff; margin-right: 6px; vertical-align: 1px;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, .35);
+  animation: pulseDot 1.6s ease-in-out infinite;
 }
 .fd-badge.tomorrow {
-  background: var(--accent); color: #fff;
-  box-shadow: 0 2px 6px rgba(29, 78, 216, .32);
+  background: linear-gradient(135deg, var(--tomorrow-deep), var(--tomorrow));
+  padding: 2.5px 11px 2.5px 8px;
+  box-shadow: 0 2px 7px rgba(232, 137, 12, .38);
 }
 .fd-badge.dayafter {
-  background: var(--accent-soft); color: var(--accent-deep);
-  border: 1px solid var(--accent-line); font-weight: 800;
+  background: linear-gradient(135deg, var(--dayafter-deep), var(--dayafter));
+  padding: 2.5px 11px 2.5px 8px;
+  box-shadow: 0 2px 7px rgba(14, 143, 111, .35);
 }
 .fd-badge.soon { background: var(--accent-soft); color: var(--accent-deep); border: 1px solid var(--accent-line); }
 .fd-badge.later { background: var(--card); color: var(--ink-3); border: 1px solid var(--line); }
@@ -281,8 +344,8 @@ a.f-title:hover { color: var(--accent); }
 .f-school { font-weight: 800; color: var(--ink); }
 .f-school .f-city { color: var(--ink-3); font-weight: 400; margin-left: 2px; }
 .tag { display: inline-flex; align-items: center; gap: 4px; border-radius: 999px; padding: 2px 11px; font-size: 11.5px; font-weight: 800; }
-.tag-online { background: var(--accent); color: #fff; }
-.tag-offline { background: var(--card); color: var(--ink); border: 1.5px solid var(--ink); }
+.tag-online { background: var(--online); color: #fff; box-shadow: 0 2px 5px rgba(14, 116, 144, .30); }
+.tag-offline { background: var(--accent); color: #fff; box-shadow: 0 2px 5px rgba(29, 78, 216, .28); }
 .tag-unknown { background: var(--bg); color: var(--ink-3); border: 1px solid var(--line); }
 .f-time {
   display: inline-flex; align-items: center; gap: 4px;
@@ -303,13 +366,13 @@ a.f-title:hover { color: var(--accent); }
 .floater-fab {
   display: inline-flex; align-items: center; gap: 7px;
   border: 0; cursor: pointer; font-family: inherit;
-  background: linear-gradient(135deg, var(--accent-deep), var(--accent));
+  background: linear-gradient(135deg, var(--today-deep), var(--today));
   color: #fff; font-size: 13px; font-weight: 700;
   min-height: 44px; padding: 0 15px; border-radius: 999px;
-  box-shadow: 0 8px 22px rgba(29, 78, 216, .38);
+  box-shadow: 0 8px 22px rgba(229, 72, 77, .40);
   transition: transform .18s ease, box-shadow .18s ease;
 }
-.floater-fab:hover { transform: translateY(-2px); box-shadow: 0 10px 26px rgba(29, 78, 216, .48); }
+.floater-fab:hover { transform: translateY(-2px); box-shadow: 0 10px 26px rgba(229, 72, 77, .50); }
 .floater-txt b { font-size: 15px; }
 .floater-dot {
   width: 8px; height: 8px; border-radius: 50%; flex: none;
@@ -391,7 +454,7 @@ a.f-title:hover { color: var(--accent); }
 .s-name { font-weight: 800; font-size: 14.5px; }
 .s-city { color: var(--ink-3); font-size: 11px; margin-left: 5px; }
 .s-status { flex: none; font-size: 11px; padding: 2px 10px; border-radius: 999px; font-weight: 700; white-space: nowrap; }
-.school-item.ok .s-status { background: var(--accent); color: #fff; box-shadow: 0 2px 5px rgba(29, 78, 216, .28); }
+.school-item.ok .s-status { background: var(--ok); color: #fff; box-shadow: 0 2px 5px rgba(22, 163, 74, .30); }
 .school-item.no .s-status { background: var(--bg); color: var(--ink-3); border: 1px solid var(--line); }
 .s-go {
   display: inline-flex; align-items: center; gap: 5px;

@@ -234,14 +234,14 @@
   function rowHtml(it, t, idx) {
     var delay = Math.min((idx || 0) * 0.02, 0.4);
     var dd = it.date || '';
-    var dayHtml, hot = false;
+    var dayHtml, hot = false, hotCls = '';
     if (isRealDate(dd)) {
       var f = fmtDate(dd);
       var days = Math.round((new Date(+f.y, +f.m - 1, +f.d) - new Date(+t.split('-')[0], +t.split('-')[1] - 1, +t.split('-')[2])) / 86400000);
       var badge;
-      if (days === 0) { badge = '<span class="fd-badge today">今天举行</span>'; hot = true; }
-      else if (days === 1) { badge = '<span class="fd-badge tomorrow">明天</span>'; hot = true; }
-      else if (days === 2) { badge = '<span class="fd-badge dayafter">后天</span>'; hot = true; }
+      if (days === 0) { badge = '<span class="fd-badge today">今天举行</span>'; hot = true; hotCls = 'hot-today'; }
+      else if (days === 1) { badge = '<span class="fd-badge tomorrow">明天举行</span>'; hot = true; hotCls = 'hot-tomorrow'; }
+      else if (days === 2) { badge = '<span class="fd-badge dayafter">后天举行</span>'; hot = true; hotCls = 'hot-dayafter'; }
       else if (days <= 7) { badge = '<span class="fd-badge soon">' + days + ' 天后</span>'; }
       else { badge = '<span class="fd-badge later"></span>'; }
       dayHtml = '<span class="fd-day">' + f.m + '/' + f.d + '</span><span class="fd-ym">' + f.y + '年</span>' + badge;
@@ -258,7 +258,7 @@
     var note = (it.note || '').trim();
     var timeTxt = timeInfo(it);
 
-    return '<div class="fair-row' + (hot ? ' hot' : '') + '" role="row" style="animation-delay:' + delay + 's">' +
+    return '<div class="fair-row' + (hot ? ' hot ' + hotCls : '') + '" role="row" style="animation-delay:' + delay + 's">' +
         '<div class="f-date" role="cell">' + dayHtml + '</div>' +
         '<div class="f-main" role="cell">' +
           '<div class="f-title-row">' +
