@@ -373,6 +373,11 @@
 
     var fab = w.querySelector('.floater-fab');
     var panel = w.querySelector('.floater-panel');
+    var closePanel = function () {
+      panel.hidden = true;
+      fab.classList.remove('open');
+      fab.setAttribute('aria-expanded', 'false');
+    };
     fab.addEventListener('click', function () {
       var willOpen = panel.hidden;
       panel.hidden = !willOpen;
@@ -382,6 +387,21 @@
     w.querySelector('.floater-close').addEventListener('click', function () {
       try { sessionStorage.setItem('floaterClosed', t); } catch (e) { /* 忽略 */ }
       w.remove();
+    });
+    // 点击悬浮框以外区域或按 ESC：收起面板
+    var docHandler = function (ev) {
+      if (!panel.hidden && !w.contains(ev.target)) closePanel();
+    };
+    var escHandler = function (ev) {
+      if (ev.key === 'Escape' && !panel.hidden) closePanel();
+    };
+    setTimeout(function () {
+      document.addEventListener('click', docHandler);
+      document.addEventListener('keydown', escHandler);
+    }, 0);
+    w.addEventListener('DOMNodeRemoved', function () {
+      document.removeEventListener('click', docHandler);
+      document.removeEventListener('keydown', escHandler);
     });
   }
 
