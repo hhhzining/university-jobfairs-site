@@ -54,9 +54,16 @@
   }
   function fmtUpdated(iso) {
     if (!iso) return '更新时间未知';
-    var m = iso.match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/);
-    if (!m) return '更新时间未知';
-    return m[1] + '-' + m[2] + '-' + m[3] + ' ' + m[4] + ':' + m[5];
+    var dt = new Date(iso);
+    if (isNaN(dt)) {
+      var m = iso.match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/);
+      if (!m) return '更新时间未知';
+      return m[1] + '-' + m[2] + '-' + m[3] + ' ' + m[4] + ':' + m[5];
+    }
+    // 统一转北京时间显示（Actions 服务器为 UTC，相差 8 小时）
+    var bj = new Date(dt.getTime() + 8 * 3600 * 1000);
+    return bj.getUTCFullYear() + '-' + pad(bj.getUTCMonth() + 1) + '-' + pad(bj.getUTCDate()) +
+      ' ' + pad(bj.getUTCHours()) + ':' + pad(bj.getUTCMinutes());
   }
   function esc(s) {
     return String(s == null ? '' : s)
@@ -94,8 +101,8 @@
       return !isRealDate(it.date) || it.date >= t;
     });
 
-    // 更新时间
-    $('updatedAt').textContent = fmtUpdated(d.meta.updated_at) + (state.isFallback ? '（内置快照）' : '');
+    // 更新时间（统一标注"更新时间"，避免用户误认为发布时间）
+    $('updatedAt').textContent = '更新时间 ' + fmtUpdated(d.meta.updated_at) + (state.isFallback ? '（内置快照）' : '');
 
     // KPI（基于过滤后的有效场次）
     var near = active.filter(function (it) {
