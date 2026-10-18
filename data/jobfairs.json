@@ -1,13 +1,13 @@
 {
  "meta": {
-  "updated_at": "2026-10-17T13:59+00:00",
+  "updated_at": "2026-10-18T04:16+00:00",
   "note": "数据由 GitHub Actions 每日自动抓取更新；抓取失败的学校保留上次数据。",
   "school_count": 12,
-  "jobfair_count": 38,
+  "jobfair_count": 36,
   "schools_status": {
    "广西大学": {
     "status": "已查-有未来场次",
-    "note": "本次抓取 1 条，累计 2 条"
+    "note": "本次抓取 1 条，累计 1 条"
    },
    "广西科技大学": {
     "status": "已查-有未来场次",
@@ -51,7 +51,7 @@
    },
    "桂林航天工业学院": {
     "status": "已查-有未来场次",
-    "note": "本次抓取 1 条，累计 2 条"
+    "note": "本次抓取 1 条，累计 1 条"
    }
   }
  },
@@ -106,28 +106,6 @@
   }
  ],
  "jobfairs": [
-  {
-   "school": "广西大学",
-   "city": "南宁",
-   "name": "广西大学土木建筑工程学院2027届毕业生双选会",
-   "date": "2026-10-17",
-   "date_end": null,
-   "mode": "线下",
-   "location": "广西大学东校园大学生活动中心",
-   "url": "https://gxu.bysjy.com.cn/detail/jobfair?id=31458",
-   "note": ""
-  },
-  {
-   "school": "桂林航天工业学院",
-   "city": "桂林市",
-   "name": "学校2027届毕业生校园综合双选会",
-   "date": "2026-10-17",
-   "date_end": null,
-   "mode": "线下",
-   "location": "南校区田径场",
-   "url": "https://guat.edu.cn/info/1002/23651.htm",
-   "note": "面向2027届毕业生综合类双选会；2026-10-17（周六）上午9:30"
-  },
   {
    "school": "广西工业学院",
    "city": "北海",
