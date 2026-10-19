@@ -1,9 +1,9 @@
 {
  "meta": {
-  "updated_at": "2026-10-19T04:25+00:00",
+  "updated_at": "2026-10-19T17:14+00:00",
   "note": "数据由 GitHub Actions 每日自动抓取更新；抓取失败的学校保留上次数据。",
   "school_count": 12,
-  "jobfair_count": 37,
+  "jobfair_count": 38,
   "schools_status": {
    "广西大学": {
     "status": "已查-有未来场次",
@@ -51,7 +51,7 @@
    },
    "桂林航天工业学院": {
     "status": "已查-有未来场次",
-    "note": "本次抓取 1 条，累计 2 条"
+    "note": "本次抓取 2 条，累计 3 条"
    }
   }
  },
@@ -106,6 +106,17 @@
   }
  ],
  "jobfairs": [
+  {
+   "school": "桂林航天工业学院",
+   "city": "桂林",
+   "name": "关于组织参加学校2027届毕业生校园综合双选会的通知 2026-10-10",
+   "date": "2026-10-19",
+   "date_end": null,
+   "mode": "",
+   "location": "南校区 田径场 三、参加人员 1. 校领导",
+   "url": "https://www.guat.edu.cn/info/1002/23651.htm",
+   "note": ""
+  },
   {
    "school": "广西工业学院",
    "city": "北海",
@@ -483,12 +494,12 @@
   {
    "school": "桂林航天工业学院",
    "city": "桂林",
-   "name": "关于组织参加学校2027届毕业生校园综合双选会的通知 2026-10-10",
+   "name": "我校成功举办2027届毕业生校园综合双选会",
    "date": "待确认",
    "date_end": null,
    "mode": "",
-   "location": "南校区 田径场 三、参加人员 1. 校领导",
-   "url": "https://www.guat.edu.cn/info/1002/23651.htm",
+   "location": "生校园综合双选会在南校区",
+   "url": "https://news.guat.edu.cn/info/1011/11602.htm",
    "note": ""
   },
   {
