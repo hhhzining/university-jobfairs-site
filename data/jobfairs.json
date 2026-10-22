@@ -1,6 +1,6 @@
 {
  "meta": {
-  "updated_at": "2026-10-22T04:26+00:00",
+  "updated_at": "2026-10-22T15:43+00:00",
   "note": "数据由 GitHub Actions 每日自动抓取更新；抓取失败的学校保留上次数据。",
   "school_count": 12,
   "jobfair_count": 38,
@@ -11,7 +11,7 @@
    },
    "广西科技大学": {
     "status": "已查-有未来场次",
-    "note": "本次抓取 3 条，累计 13 条"
+    "note": "本次抓取 4 条，累计 13 条"
    },
    "桂林电子科技大学": {
     "status": "已查-有未来场次",
@@ -19,7 +19,7 @@
    },
    "广西师范大学": {
     "status": "已查-有未来场次",
-    "note": "本次实时未解析到，历史保留 4 条（官网未同步/跨平台场次）"
+    "note": "本次抓取 2 条，累计 4 条"
    },
    "南宁师范大学": {
     "status": "已查-有未来场次",
@@ -107,6 +107,17 @@
  ],
  "jobfairs": [
   {
+   "school": "广西科技大学",
+   "city": "柳州",
+   "name": "广西科技大学2027届生物化工类毕业生双选会邀请函",
+   "date": "2026-10-22",
+   "date_end": null,
+   "mode": "线下",
+   "location": "校区",
+   "url": "https://www.gxbys.com/jobfair/view/id/40910/mark",
+   "note": ""
+  },
+  {
    "school": "广西工业学院",
    "city": "北海",
    "name": "现场 广西工业学院（原桂林电子科技大学北海校区）2027届毕业生秋季双选会邀请函",
@@ -137,17 +148,6 @@
    "mode": "线下",
    "location": "（一）时间： 202 6 年 10 月 27 日（ 星期二 ） 14：3 0-1 7 ： 3 0 （",
    "url": "https://gxnu.bysjy.com.cn/detail/jobfair?id=31457",
-   "note": ""
-  },
-  {
-   "school": "广西师范大学",
-   "city": "桂林",
-   "name": "【广西师范大学雁山校区】 第五届云校招“名企优岗广西行”2027届毕业生秋季巡回双选会",
-   "date": "2026-10-27",
-   "date_end": null,
-   "mode": "线下",
-   "location": "组织方：云校招 参会人员：广西师范大学2027届毕业生 活动时间：2026年9月20日14:30-1",
-   "url": "https://gxnu.bysjy.com.cn/detail/jobfair?id=30160",
    "note": ""
   },
   {
@@ -215,17 +215,6 @@
    "location": "广西财经学院相思湖校区足球场（南宁市大学西路189号）",
    "url": "https://www.gxbys.com/jobfair91/view?id=40872",
    "note": "财经类专场；举办时间9:00-14:30；学校官网通知公告（2026-09-18）已发邀请函，面向2027届毕业生。"
-  },
-  {
-   "school": "广西科技大学",
-   "city": "柳州",
-   "name": "广西科技大学2027届生物化工类毕业生双选会",
-   "date": "2026-11-03",
-   "date_end": null,
-   "mode": "线下",
-   "location": "广西科技大学柳石校区田径场",
-   "url": "https://www.gxbys.com/jobfair/view/id/40905/mark",
-   "note": ""
   },
   {
    "school": "广西科技大学",
@@ -457,6 +446,17 @@
    "location": "文昌校区",
    "url": "http://gxkejidx.jiuyeb.cn/News/zdydetail.html?cateid=null&id=10ee6de5-569c-243e-af7f-f83e3deaaf90",
    "note": "拟举办，上午"
+  },
+  {
+   "school": "广西师范大学",
+   "city": "桂林",
+   "name": "【广西师范大学雁山校区】 第五届云校招“名企优岗广西行”2027届毕业生秋季巡回双选会",
+   "date": "待确认",
+   "date_end": null,
+   "mode": "线下",
+   "location": "组织方：云校招 参会人员：广西师范大学2027届毕业生 活动时间：2026年9月20日14:30-1",
+   "url": "https://gxnu.bysjy.com.cn/detail/jobfair?id=30160",
+   "note": ""
   },
   {
    "school": "广西财经学院",
