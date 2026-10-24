@@ -1,13 +1,13 @@
 {
  "meta": {
-  "updated_at": "2026-10-23T15:40+00:00",
+  "updated_at": "2026-10-24T04:22+00:00",
   "note": "数据由 GitHub Actions 每日自动抓取更新；抓取失败的学校保留上次数据。",
   "school_count": 12,
   "jobfair_count": 38,
   "schools_status": {
    "广西大学": {
     "status": "已查-有未来场次",
-    "note": "本次抓取 1 条，累计 1 条"
+    "note": "本次实时未解析到，历史保留 1 条（官网未同步/跨平台场次）"
    },
    "广西科技大学": {
     "status": "已查-有未来场次",
@@ -106,17 +106,6 @@
   }
  ],
  "jobfairs": [
-  {
-   "school": "广西工业学院",
-   "city": "北海",
-   "name": "现场 广西工业学院（原桂林电子科技大学北海校区）2027届毕业生秋季双选会邀请函",
-   "date": "2026-10-23",
-   "date_end": null,
-   "mode": "线下",
-   "location": "1. 时间： 2026 年 10 月 23 日（星期五） 9:30—13:00",
-   "url": "https://gliet.gxbys.com/jobfair/view/id/40893",
-   "note": ""
-  },
   {
    "school": "广西大学",
    "city": "南宁",
@@ -446,6 +435,17 @@
    "location": "文昌校区",
    "url": "http://gxkejidx.jiuyeb.cn/News/zdydetail.html?cateid=null&id=10ee6de5-569c-243e-af7f-f83e3deaaf90",
    "note": "拟举办，上午"
+  },
+  {
+   "school": "广西工业学院",
+   "city": "北海",
+   "name": "现场 广西工业学院（原桂林电子科技大学北海校区）2027届毕业生秋季双选会邀请函",
+   "date": "待确认",
+   "date_end": null,
+   "mode": "线下",
+   "location": "1. 时间： 2026 年 10 月 23 日（星期五） 9:30—13:00",
+   "url": "https://gliet.gxbys.com/jobfair/view/id/40893",
+   "note": ""
   },
   {
    "school": "广西师范大学",
