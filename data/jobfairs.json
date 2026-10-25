@@ -1,13 +1,13 @@
 {
  "meta": {
-  "updated_at": "2026-10-24T14:10+00:00",
+  "updated_at": "2026-10-25T04:26+00:00",
   "note": "数据由 GitHub Actions 每日自动抓取更新；抓取失败的学校保留上次数据。",
   "school_count": 12,
-  "jobfair_count": 38,
+  "jobfair_count": 37,
   "schools_status": {
    "广西大学": {
-    "status": "已查-有未来场次",
-    "note": "本次实时未解析到，历史保留 1 条（官网未同步/跨平台场次）"
+    "status": "已查-暂无未来场次",
+    "note": "入口可访问但未解析到未来双选会条目"
    },
    "广西科技大学": {
     "status": "已查-有未来场次",
@@ -106,17 +106,6 @@
   }
  ],
  "jobfairs": [
-  {
-   "school": "广西大学",
-   "city": "南宁",
-   "name": "广西大学2027届毕业生秋季双选会",
-   "date": "2026-10-24",
-   "date_end": null,
-   "mode": "线下",
-   "location": "西校园篮球场及田径场",
-   "url": "https://gxu.bysjy.com.cn/detail/jobfair?id=31462",
-   "note": ""
-  },
   {
    "school": "广西师范大学",
    "city": "桂林",
