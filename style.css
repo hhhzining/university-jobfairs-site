@@ -358,6 +358,33 @@ a.f-title:hover { color: var(--accent); }
 .f-loc svg { flex: none; color: var(--accent); }
 .f-note { font-size: 13px; color: var(--ink-2); }
 
+/* ============ 桂林市现场招聘会（非校园） ============ */
+.guilin-toolbar { padding: 0 0 4px; border: 0; box-shadow: none; position: static; }
+.guilin-tip { margin-left: auto; align-self: center; }
+.tag.g-target-grad {
+  background: linear-gradient(135deg, #0e7490, #0e8f6f); color: #fff;
+  box-shadow: 0 2px 5px rgba(14, 116, 144, .28);
+}
+.tag.g-target-job { background: var(--bg); color: var(--ink-2); border: 1px solid var(--line); }
+.tag.g-src { background: var(--card); color: var(--ink-2); border: 1px solid var(--line); font-weight: 600; padding: 2px 10px; }
+.tag.g-src-glrcw { color: var(--accent-deep); border-color: var(--accent-line); background: var(--accent-soft); }
+.tag.g-src-rsj { color: var(--online); border-color: var(--online-line); background: var(--online-soft); }
+.g-org { font-size: 12px; color: var(--ink-2); font-weight: 600; }
+.g-phone { font-size: 12px; color: var(--ink-3); margin-top: 2px; }
+.g-phone::before { content: ''; display: inline-block; width: 4px; height: 4px; border-radius: 50%; background: var(--ok); margin-right: 7px; vertical-align: 1.5px; }
+.g-pager { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 7px; margin-top: 22px; }
+.g-pager button {
+  min-width: 42px; min-height: 42px; padding: 0 13px;
+  border: 1px solid var(--line); border-radius: 10px;
+  background: var(--card); color: var(--ink); font-size: 13.5px; font-weight: 600;
+  cursor: pointer; font-family: inherit; box-shadow: var(--shadow-sm);
+  transition: background .16s, color .16s, border-color .16s;
+}
+.g-pager button:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+.g-pager button:disabled { opacity: .38; cursor: not-allowed; }
+.g-pager button.current { background: var(--accent); color: #fff; border-color: var(--accent); box-shadow: 0 3px 8px rgba(29, 78, 216, .30); }
+.g-pager .gap { min-width: 0; min-height: 0; border: 0; background: transparent; color: var(--ink-3); padding: 0 2px; cursor: default; box-shadow: none; }
+
 /* ============ 右下角悬浮框：今日双选会提示 ============ */
 .floater {
   position: fixed; right: 14px; bottom: calc(14px + env(safe-area-inset-bottom, 0px));
