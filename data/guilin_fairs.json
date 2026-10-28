@@ -1,6 +1,6 @@
 {
  "meta": {
-  "updated_at": "2026-10-28T01:02+08:00",
+  "updated_at": "2026-10-28T05:36+00:00",
   "note": "桂林市非校园线下现场招聘会（含桂林人才网、桂林市人社局等公开渠道）；面向校招/毕业生场次优先展示；数据每日自动更新。",
   "fair_count": 1,
   "source_status": {
@@ -10,7 +10,7 @@
    },
    "桂林市人社局": {
     "status": "成功",
-    "note": "获取 0 条候选"
+    "note": "获取 0 条候选；rsj page1: HTTPConnectionPool(host='rsj.guilin.gov.cn', port=80): Read "
    }
   }
  },
