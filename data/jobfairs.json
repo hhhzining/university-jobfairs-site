@@ -1,6 +1,6 @@
 {
  "meta": {
-  "updated_at": "2026-10-28T05:23+00:00",
+  "updated_at": "2026-10-28T16:52+00:00",
   "note": "数据由 GitHub Actions 每日自动抓取更新；每校数据仅来自该校官网就业信息网/官方就业平台；抓取失败的学校保留上次数据。",
   "school_count": 12,
   "jobfair_count": 10,
@@ -11,11 +11,11 @@
    },
    "广西科技大学": {
     "status": "保留上次数据",
-    "note": "http://gxkejidx.jiuyeb.cn/Chuangye/sxlb.html?status=0: HTTPConnectionPool(host='gxkejidx.jiuyeb.cn', port=80): Max retries ex；http://gxkejidx.jiuyeb.cn/News/zdylist.html?cateid=1: HTTPConnectionPool(host='gxkejidx.jiuyeb.cn', port=80): Max retries ex；http://gxkejidx.jiuyeb.cn/News/zdylist.html: HTTPConnectionPool(host='gxkejidx.jiuyeb.cn', port=80): Max retries ex；上次:未知"
+    "note": "http://gxkejidx.jiuyeb.cn/Chuangye/sxlb.html?status=0: HTTPConnectionPool(host='gxkejidx.jiuyeb.cn', port=80): Max retries ex；http://gxkejidx.jiuyeb.cn/News/zdylist.html?cateid=1: HTTPConnectionPool(host='gxkejidx.jiuyeb.cn', port=80): Max retries ex；http://gxkejidx.jiuyeb.cn/News/zdylist.html: HTTPConnectionPool(host='gxkejidx.jiuyeb.cn', port=80): Max retries ex；上次:保留上次数据"
    },
    "桂林电子科技大学": {
     "status": "已查-有未来场次",
-    "note": "本次抓取 1 条，累计 1 条"
+    "note": "本次实时未解析到，历史保留 1 条（官网未同步/跨平台场次）"
    },
    "广西师范大学": {
     "status": "已查-有未来场次",
@@ -31,11 +31,11 @@
    },
    "广西民族大学": {
     "status": "保留上次数据",
-    "note": "https://jyb.gxmzu.edu.cn/module/jobfairs?menu_id=24306: HTTPSConnectionPool(host='jyb.gxmzu.edu.cn', port=443): Read timed out；上次:未知"
+    "note": "https://jyb.gxmzu.edu.cn/module/jobfairs?menu_id=24306: HTTPSConnectionPool(host='jyb.gxmzu.edu.cn', port=443): Read timed out；上次:保留上次数据"
    },
    "广西财经学院": {
     "status": "保留上次数据",
-    "note": "https://jyxx.gxufe.edu.cn/News/newsList.html?cateid=cd403865-981f-6b48-e8e5-4825b43a6e9d: HTTPSConnectionPool(host='jyxx.gxufe.edu.cn', port=443): Max retries e；https://jyxx.gxufe.edu.cn: HTTPSConnectionPool(host='jyxx.gxufe.edu.cn', port=443): Max retries e；上次:未知"
+    "note": "https://jyxx.gxufe.edu.cn/News/newsList.html?cateid=cd403865-981f-6b48-e8e5-4825b43a6e9d: HTTPSConnectionPool(host='jyxx.gxufe.edu.cn', port=443): Max retries e；https://jyxx.gxufe.edu.cn: HTTPSConnectionPool(host='jyxx.gxufe.edu.cn', port=443): Max retries e；上次:保留上次数据"
    },
    "广西科技师范学院": {
     "status": "已查-暂无未来场次",
@@ -47,7 +47,7 @@
    },
    "广西工业学院": {
     "status": "已查-有未来场次",
-    "note": "本次抓取 1 条，累计 1 条"
+    "note": "本次实时未解析到，历史保留 1 条（官网未同步/跨平台场次）"
    },
    "桂林航天工业学院": {
     "status": "已查-有未来场次",
@@ -126,7 +126,7 @@
    "mode": "线下",
    "location": "桂林理工大学雁山校区体育训练馆",
    "url": "https://jy.glut.edu.cn/m/pages/jobfair/jobfair-detail?jobFairId=7040",
-   "note": "参会单位 47 家；提供岗位 166 个"
+   "note": "参会单位 52 家；提供岗位 206 个"
   },
   {
    "school": "北部湾大学",
