@@ -1,9 +1,9 @@
 {
  "meta": {
-  "updated_at": "2026-10-28T16:52+00:00",
+  "updated_at": "2026-10-29T05:32+00:00",
   "note": "数据由 GitHub Actions 每日自动抓取更新；每校数据仅来自该校官网就业信息网/官方就业平台；抓取失败的学校保留上次数据。",
   "school_count": 12,
-  "jobfair_count": 10,
+  "jobfair_count": 11,
   "schools_status": {
    "广西大学": {
     "status": "已查-暂无未来场次",
@@ -43,11 +43,11 @@
    },
    "北部湾大学": {
     "status": "已查-有未来场次",
-    "note": "本次抓取 3 条，累计 3 条"
+    "note": "本次抓取 4 条，累计 4 条"
    },
    "广西工业学院": {
     "status": "已查-有未来场次",
-    "note": "本次实时未解析到，历史保留 1 条（官网未同步/跨平台场次）"
+    "note": "本次抓取 1 条，累计 1 条"
    },
    "桂林航天工业学院": {
     "status": "已查-有未来场次",
@@ -126,7 +126,7 @@
    "mode": "线下",
    "location": "桂林理工大学雁山校区体育训练馆",
    "url": "https://jy.glut.edu.cn/m/pages/jobfair/jobfair-detail?jobFairId=7040",
-   "note": "参会单位 52 家；提供岗位 206 个"
+   "note": "参会单位 55 家；提供岗位 214 个"
   },
   {
    "school": "北部湾大学",
@@ -151,6 +151,17 @@
    "note": ""
   },
   {
+   "school": "北部湾大学",
+   "city": "钦州",
+   "name": "北部湾大学机船、食品两院“聚才向海”联合毕业生秋季双选会邀请函",
+   "date": "2026-11-18",
+   "date_end": null,
+   "mode": "线下",
+   "location": "北部湾大学大学生创业园一楼（广西钦州市钦南区滨海大道12号）",
+   "url": "https://qzhu.bysjy.com.cn/detail/jobfair?id=31989",
+   "note": ""
+  },
+  {
    "school": "桂林理工大学",
    "city": "桂林",
    "name": "桂林理工大学南宁分校2027届毕业生秋季线下双选会邀请函",
@@ -159,7 +170,7 @@
    "mode": "线下",
    "location": "空港校区体育馆（广西扶绥县空港大道21号）",
    "url": "https://jy.glut.edu.cn/m/pages/jobfair/jobfair-detail?jobFairId=7045",
-   "note": "参会单位 17 家；提供岗位 45 个"
+   "note": "参会单位 17 家；提供岗位 55 个"
   },
   {
    "school": "广西工业学院",
