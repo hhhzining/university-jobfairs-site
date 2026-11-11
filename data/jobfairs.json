@@ -1,9 +1,9 @@
 {
  "meta": {
-  "updated_at": "2026-11-10T18:21+00:00",
+  "updated_at": "2026-11-11T05:54+00:00",
   "note": "数据由 GitHub Actions 每日自动抓取更新；每校数据仅来自该校官网就业信息网/官方就业平台；抓取失败的学校保留上次数据。",
   "school_count": 12,
-  "jobfair_count": 11,
+  "jobfair_count": 10,
   "schools_status": {
    "广西大学": {
     "status": "已查-暂无未来场次",
@@ -43,11 +43,11 @@
    },
    "北部湾大学": {
     "status": "已查-有未来场次",
-    "note": "本次抓取 3 条，累计 5 条"
+    "note": "本次抓取 3 条，累计 4 条"
    },
    "广西工业学院": {
     "status": "已查-有未来场次",
-    "note": "本次实时未解析到，历史保留 1 条（官网未同步/跨平台场次）"
+    "note": "本次抓取 1 条，累计 1 条"
    },
    "桂林航天工业学院": {
     "status": "已查-有未来场次",
@@ -109,45 +109,23 @@
   {
    "school": "北部湾大学",
    "city": "钦州",
-   "name": "北部湾大学经济管理学院、水利与海岸工程学院 2027届毕业生秋季就业双选会",
-   "date": "2026-11-10",
-   "date_end": null,
-   "mode": "线下",
-   "location": "北部湾大学四号教学楼",
-   "url": "https://qzhu.bysjy.com.cn/detail/jobfair?id=31706",
-   "note": ""
-  },
-  {
-   "school": "北部湾大学",
-   "city": "钦州",
-   "name": "北部湾大学经济管理学院2027届毕业生秋季就业双选会",
-   "date": "2026-11-10",
-   "date_end": null,
-   "mode": "线下",
-   "location": "北部湾大学四号教学楼",
-   "url": "https://qzhu.bysjy.com.cn/detail/jobfair?id=31706",
-   "note": ""
-  },
-  {
-   "school": "桂林航天工业学院",
-   "city": "桂林",
-   "name": "关于组织参加学校2027届毕业生校园综合双选会的通知 2026-10-10",
-   "date": "2026-11-10",
-   "date_end": null,
-   "mode": "",
-   "location": "南校区 田径场 三、参加人员 1. 校领导",
-   "url": "https://www.guat.edu.cn/info/1002/23651.htm",
-   "note": ""
-  },
-  {
-   "school": "北部湾大学",
-   "city": "钦州",
    "name": "北部湾大学2027届信息技术类高校毕业生秋季就业双选会",
    "date": "2026-11-18",
    "date_end": null,
    "mode": "线下",
    "location": "北部湾大学大学生创业园一楼大厅（钦州市滨海新城滨海大道12号）",
    "url": "https://qzhu.bysjy.com.cn/detail/jobfair?id=31977",
+   "note": ""
+  },
+  {
+   "school": "北部湾大学",
+   "city": "钦州",
+   "name": "北部湾大学机船、食品、电信三院“聚才向海”联合毕业生秋季双选会邀请函",
+   "date": "2026-11-18",
+   "date_end": null,
+   "mode": "线下",
+   "location": "北部湾大学大学生创业园一楼（广西钦州市钦南区滨海大道12号）",
+   "url": "https://qzhu.bysjy.com.cn/detail/jobfair?id=31989",
    "note": ""
   },
   {
@@ -225,6 +203,17 @@
    "mode": "线下",
    "location": "花江校区大学生活动中心 二、参会企业 桂林电子科技大学版权所有 可信网站验证 安全联盟 可信网站验证",
    "url": "https://jy.guet.edu.cn/detail/news?id=1772188&menu_id=41860&type_id=16936",
+   "note": ""
+  },
+  {
+   "school": "桂林航天工业学院",
+   "city": "桂林",
+   "name": "关于组织参加学校2027届毕业生校园综合双选会的通知 2026-10-10",
+   "date": "待确认",
+   "date_end": null,
+   "mode": "",
+   "location": "南校区 田径场 三、参加人员 1. 校领导",
+   "url": "https://www.guat.edu.cn/info/1002/23651.htm",
    "note": ""
   }
  ]
